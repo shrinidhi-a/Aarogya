@@ -56,7 +56,7 @@ component output="true"{
                 local.appointment = new model.appointment();
 
                 if(local.appointment.setPrescriptionStatus(arguments.appointmentID)){
-                    local.prescriptionLink = "http://localhost:8500/AarogyaMiniProject-2.0/index.cfm?action=profile"; 
+                    local.prescriptionLink = "http://localhost:8500/Aarogya/index.cfm?action=profile"; 
 
                     local.emailBody = "
                     <html>

@@ -108,7 +108,7 @@ component output="true"{
             if (local.cancel.cancelAppointment(arguments.key)) {
                 if (session.role == "admin") {
                     // Prepare the email body
-                    local.link = "http://localhost:8500/AarogyaMiniProject-2.0/index.cfm?action=profile";
+                    local.link = "http://localhost:8500/Aarogya/index.cfm?action=profile";
                     local.emailBody = "
                     <html>
                     <body>
@@ -186,7 +186,7 @@ component output="true"{
             if (local.noshow.noshowAppointment(arguments.key)) {
                 if (session.role == "admin") {
                     // Prepare the email body for no-show notification
-                    local.link = "http://localhost:8500/AarogyaMiniProject-2.0/index.cfm?action=profile";
+                    local.link = "http://localhost:8500/Aarogya/index.cfm?action=profile";
                     local.emailBody = "
                     <html>
                     <body>
@@ -263,7 +263,7 @@ component output="true"{
             // Attempt to accept the appointment
             if (local.accept.acceptAppointment(arguments.key)) {
                 // Prepare email details
-                local.link = "http://localhost:8500/AarogyaMiniProject-2.0/index.cfm?action=profile";
+                local.link = "http://localhost:8500/Aarogya/index.cfm?action=profile";
                 local.emailBody = "
                 <html>
                 <body>
@@ -499,7 +499,7 @@ component output="true"{
 
             
             // Prepare email details
-            local.link = "http://localhost:8500/AarogyaMiniProject-2.0/index.cfm?action=profile";
+            local.link = "http://localhost:8500/Aarogya/index.cfm?action=profile";
             local.emailBody = "
                 <html>
                 <body>

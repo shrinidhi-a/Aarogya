@@ -5,7 +5,7 @@ component {
     this.sessionTimeout = CreateTimeSpan(0, 0, 30, 0);
     this.datasource="ProjectAarogya2.0";
     this.mappings = StructNew();
-    this.mappings["/model"] = "C:\ColdFusion2023\cfusion\wwwroot\AarogyaMiniProject-2.0\models";
+    this.mappings["/model"] = "C:\ColdFusion2023\cfusion\wwwroot\Aarogya\models";
    
     function onApplicationStart() {
         structAppend(Application, {

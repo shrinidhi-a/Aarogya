@@ -53,7 +53,7 @@ component output="true"{
 
             
             if (local.registrationResult) {
-                local.welcomeLink = "http://localhost:8500/AarogyaMiniProject-2.0/index.cfm?action=profile"; 
+                local.welcomeLink = "http://localhost:8500/Aarogya/index.cfm?action=profile"; 
                 local.emailBody = "
                     <html>
                         <body>
@@ -171,7 +171,7 @@ component output="true"{
                 local.tokenUpdated = local.forgotUser.updateToken(arguments.email, local.resetToken, local.resetTokenExpiration);
 
                 if(local.tokenUpdated){
-                    local.resetLink = "http://localhost:8500/AarogyaMiniProject-2.0/index.cfm?action=resetPassword&resetToken=" & local.resetToken;
+                    local.resetLink = "http://localhost:8500/Aarogya/index.cfm?action=resetPassword&resetToken=" & local.resetToken;
                     local.emailBody = "
                         <html>
                         <body>

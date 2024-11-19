@@ -39,7 +39,7 @@ component {
                 );
 
                 if (local.appointmentInfo.recordCount > 0) {
-                    local.link = "http://localhost:8500/AarogyaMiniProject-2.0/index.cfm?action=profile"
+                    local.link = "http://localhost:8500/Aarogya/index.cfm?action=profile"
 
                     local.emailBody = "
                     <html>
@@ -136,7 +136,7 @@ component {
                             }
                         );
 
-                        local.link = "http://localhost:8500/AarogyaMiniProject-2.0/index.cfm?action=profile"
+                        local.link = "http://localhost:8500/Aarogya/index.cfm?action=profile"
 
                         local.emailBody = "
                         <html>
