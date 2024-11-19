@@ -1,0 +1,192 @@
+<div class="row d-flex flex-column align-items-center justify-content-center">
+
+    <div class="card shadow border border-0 mb-3 mt-5 mx-2" style="height: auto; width:99%;">
+        <div class="card-body">
+            <div class="pt-4 pb-2">
+                <h5 class="card-title text-center pb-0 fs-4">Your Basic Information</h5>
+                <p class="text-center small" style="color:#4fa284">You can update your basic information below</p>
+                <div id="messageDivBasic" class="alert"></div>
+            </div>
+
+            <div class="col mt-2">
+                <label for="yourNametoUpdate" class="form-label">Full Name</label>
+                <input
+                    type="text"
+                    name="name"
+                    class="form-control"
+                    value="{{USERFULLNAME}}"
+                    id="yourNametoUpdate"
+                    required
+                />
+                <div class="invalid-feedback"></div>
+            </div>
+
+            <div class="col mt-4">
+                <label for="yourDobtoUpdate" class="form-label">Date of Birth</label>
+                <input
+                    type="date"
+                    name="dateofbirth"
+                    class="form-control"
+                    value="{{USERDOB}}"
+                    id="yourDobtoUpdate"
+                    required
+                />
+                <div class="invalid-feedback"></div>
+            </div>
+
+            <div class="col mt-4">
+                <label for="yourEmailtoUpdate" class="form-label">Email Address</label>
+                <div class="input-group has-validation">
+                    <span class="input-group-text" id="inputGroupPrepend">@</span>
+                    <input
+                        type="email"
+                        name="email"
+                        class="form-control"
+                        value="{{USEREMAIL}}"
+                        id="yourEmailtoUpdate"
+                        required
+                    />
+                    <div class="invalid-feedback"></div>
+                </div>
+            </div>
+
+            <div class="col mt-4 mb-4">
+                <label for="yourPhoneNumbertoUpdate" class="form-label">Phone Number</label>
+                <div class="input-group has-validation">
+                    <input
+                        type="tel"
+                        name="phoneNumber"
+                        class="form-control"
+                        value="{{USERPHONE}}"
+                        id="yourPhoneNumbertoUpdate"
+                        required
+                    />
+                    <div class="invalid-feedback"></div>
+                </div>
+            </div>
+
+            <div class="col mt-4 mb-4">
+                <button
+                    id="submitBtntoUpdate"
+                    class="btn w-100 shadow"
+                    style="background-color:#fdfdfd; color:#4fa284"
+                >Update Basic Information</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="row">
+
+    <div class="col">
+
+        <div class="card shadow border border-0 mb-3 mt-2" style="height: auto; width:100%; overflow-y: auto;">
+            <div class="card-body">
+
+                <div class="pt-4 pb-2">
+                    <h5 class="card-title text-center pb-0 fs-4">Your Insurance Information</h5>
+                    <p class="text-center small" style="color:#4fa284">You can update your insurance information below</p>
+                    <div id="messageDivInsurance" class="alert"></div>
+                </div>
+
+                <div class="col mt-4">
+                    <label for="yourInPrtoUpdate" class="form-label">Insurance provider</label>
+                    <input
+                        type="text"
+                        name="insuranceProvider"
+                        class="form-control"
+                        value="{{USERINSURANCEPROVIDER}}"
+                        id="yourInPrtoUpdate"
+                        required
+                    />
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                <div class="col mt-4">
+                    <label for="yourInValtoUpdate" class="form-label">Insurance coverage expiration date</label>
+                    <input
+                        type="date"
+                        name="insuranceExpiration"
+                        class="form-control"
+                        value="{{USERINSURANCECOVERAGE}}"
+                        id="yourInValtoUpdate"
+                        required
+                    />
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                <div class="col mt-4 mb-4">
+                    <button
+                        id="submitBtnInsuranceInfotoUpdate"
+                        class="btn w-100 shadow"
+                        style="background-color:#fdfdfd; color:#4fa284"
+                    >Update insurance Information</button>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col">
+
+        <div class="card shadow border border-0 mb-3 mt-2" style="height: auto; width:100%; overflow-y: auto;">
+
+            <div class="card-body">
+
+                <div class="pt-4 pb-2">
+                    <h5 class="card-title text-center pb-0 fs-4">Your Password</h5>
+                    <p class="text-center small" style="color:#4fa284">You can reset your password below</p>
+                    <div id="messageDivPassword" class="alert"></div>
+                </div>
+
+                <div class="col mt-4">
+                    <label for="oldPasswordInput" class="form-label">Old Password</label>
+                    <input
+                        type="password"
+                        name="oldPasswordInput"
+                        class="form-control"
+                        id="oldPasswordInput"
+                        required
+                    />
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                <div class="col mt-4">
+                    <label for="newPasswordInput" class="form-label">New Password</label>
+                    <input
+                        type="password"
+                        name="newPasswordInput"
+                        class="form-control"
+                        id="newPasswordInput"
+                        required
+                    />
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                <div class="col mt-4">
+                    <label for="reenterPasswordInput" class="form-label">Re-Enter New Password</label>
+                    <input
+                        type="password"
+                        name="reenterPasswordInput"
+                        class="form-control"
+                        id="reenterPasswordInput"
+                        required
+                    />
+                    <div class="invalid-feedback"></div>
+                </div>
+
+                <div class="col mt-4 mb-4">
+                    <button
+                        id="submitBtnPasswordUpdate"
+                        class="btn w-100 shadow"
+                        style="background-color:#fdfdfd; color:#4fa284"
+                    >Update Password</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>

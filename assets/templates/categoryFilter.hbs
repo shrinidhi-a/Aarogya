@@ -1,0 +1,9 @@
+<label for="categorySelectFilter" class="form-label">Select Category</label>
+<select name="category" class="form-control" id="categorySelectFilter" required>
+    <option value="default" disabled selected>-- Click here --</option>
+    <option value="">Show All Categories</option>
+    {{#each this}}
+        <option value="{{@key}}">{{this}}</option>
+    {{/each}}
+</select>
+<div class="invalid-feedback"></div>

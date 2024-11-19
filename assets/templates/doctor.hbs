@@ -1,0 +1,8 @@
+<label for="doctorSelect" class="form-label">Select Doctor</label>
+<select name="doctor" class="form-control" id="doctorSelect" required>
+    <option value="default" disabled selected>-- Click here --</option>
+    {{#each this}}
+        <option value="{{@key}}">{{this.FULLNAME}}</option>
+    {{/each}}
+</select>
+<div class="invalid-feedback"></div>

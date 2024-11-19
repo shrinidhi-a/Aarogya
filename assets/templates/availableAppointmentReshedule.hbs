@@ -1,0 +1,12 @@
+<label for="appointmentBtns" class="form-label">Available Appointments:</label>
+<div class="border">
+    <div class="m-2 text-center" id="appointmentBtns">
+        {{#each APPOINTMENTS}}
+            <button type="button" id="selectAppointmentsBtn_{{this.ID}}" class="btn btn-sm btn-outline-secondary m-1" {{#if this.ISENABLED}}disabled{{/if}}>
+                {{this.TIME}}
+            </button>
+        {{/each}}
+    </div>
+</div>
+<input type="hidden" id="selectedAppointmentReshedule" name="selectedAppointmentReshedule" value="">
+<div class="invalid-feedback"></div>

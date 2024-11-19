@@ -1,0 +1,41 @@
+body {
+    font-family: "Open Sans", sans-serif;
+    background-color: #fdfdfd;
+}
+
+.footer {
+    padding: 20px 0;
+    font-size: 14px;
+    transition: all 0.3s;
+}
+
+.footer .copyright {
+    text-align: center;
+    color: #1a4041;
+}
+
+.footer .credits {
+    padding-top: 5px;
+    text-align: center;
+    font-size: 13px;
+    color: #1a4041;
+}
+
+.nav-link {
+    transition: color 0.3s;
+}
+.nav-link.active {
+    color: #4fa284 !important; /* Customize active color */
+}
+.nav-link.navColor {
+    color: #828282; /* Customize for Pending */
+}
+
+.nav-link:hover {
+    color: #4fa284; /* Change color on hover */
+}
+
+.dropdown-item.active {
+    background-color: #d3d3d3; /* Color on click */
+    color: #fff; /* Change text color if needed */
+}

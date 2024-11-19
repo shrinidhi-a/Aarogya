@@ -1,0 +1,63 @@
+{{#if (isEqual role "admin")}}
+    <div class="card-header">
+        Admin Information
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-sm-6 mb-3 mb-sm-0">
+                <div class="card">
+                    <div class="card-header">
+                        Admin Name
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">{{FullName}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-header">
+                        Admin Email
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">{{Email}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{{else}}
+    <div class="card-header">
+        Your Information
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-sm-6 mb-3 mb-sm-0">
+                <div class="card">
+                    <div class="card-header">
+                        Personal Information
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">Name: {{FullName}}</p>
+                        <p class="card-text">Date of Birth: {{DOB}}</p>
+                        <p class="card-text">Email: {{Email}}</p>
+                        <p class="card-text">Phone: {{Phone}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-header">
+                        Insurance Information
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">Insurance Provider:
+                            {{InsuranceProvider}}</p>
+                        <p class="card-text">Insurance Coverage:
+                            {{InsuranceCoverage}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{{/if}}

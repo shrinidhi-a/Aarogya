@@ -1,0 +1,112 @@
+{{#each this as |doctor key|}}
+    <div class="card shadow border border-0 px-0 mt-5" style="height:230px;">
+        <div class="row">
+            <div class="col-md-3">
+                <img
+                    src="./uploads{{doctor.IMAGEPATH}}"
+                    class="img-fluid rounded-start"
+                    alt="Doctor Image"
+                    style="width: 200px; height: 230px; object-fit: cover;"
+                />
+            </div>
+
+            <div class="col-md-9">
+                <div class="card-body">
+                    <h5 class="card-title" style="color: #4fa284;">{{doctor.FULLNAME}}</h5>
+                    <div class="row">
+                        <div class="col">
+                            <h6 style="color: #4fa284;">Doctor Information:</h6>
+                            <p class="card-text">
+                                Qualification: {{doctor.QUALIFICATION}}<br />
+                                Specialization: {{doctor.CATEGORY}}<br />
+                                Email: <a href="mailto:{{doctor.EMAIL}}">{{doctor.EMAIL}}</a><br />
+                                Phone: <a href="tel:{{doctor.PHONE}}">{{doctor.PHONE}}</a><br />
+                            </p>
+                        </div>
+
+                        <div class="col">
+                            <h6 style="color: #4fa284;">Available Appointments On {{doctor.DATE}}:</h6>
+                            <div class="border-0">
+                                <div class="m-2 text-center" id="appointmentBtns">
+                                    {{#each doctor.APPOINTMENTDETAILS.APPOINTMENTS as |appointment|}}
+                                        <button type="button" id="selectAppointmentsBtn_{{appointment.ID}}_{{doctor.DOCTORID}}" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#modalSelectedDoctordetail_{{doctor.CATEGOTYID}}_{{appointment.ID}}" 
+                                                class="btn btn-sm btn-outline-secondary m-1" 
+                                                {{#if appointment.ISENABLED}}disabled{{/if}}>
+                                            {{appointment.TIME}}
+                                        </button>
+
+                                        <!-- Modal Section -->
+                                        <div class="modal fade" id="modalSelectedDoctordetail_{{doctor.CATEGOTYID}}_{{appointment.ID}}" tabindex="-1" data-bs-backdrop="static" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                                                <div class="modal-content">
+                                                    <div class="modal-header border-0">
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+
+                                                    <div class="modal-body">
+
+                                                        <table class="table table-hover align-middle shadow-sm mb-4">
+                                                            <thead class="table-success">
+                                                                <tr>
+                                                                    <th colspan="2" class="text-center" style="color: #4fa284;">
+                                                                        Appointment Details
+                                                                    </th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td scope="row" class="text-end" style="width: 30%;">Doctor Name</td>
+                                                                    <td>{{doctor.FULLNAME}}</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td scope="row" class="text-end">Qualification</td>
+                                                                    <td>{{doctor.QUALIFICATION}}</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td scope="row" class="text-end">Specialization</td>
+                                                                    <td>{{doctor.CATEGORY}}</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td scope="row" class="text-end">Email</td>
+                                                                    <td>
+                                                                        <a href="mailto:{{doctor.EMAIL}}" class="text-decoration-none text-primary">{{doctor.EMAIL}}</a>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td scope="row" class="text-end">Phone</td>
+                                                                    <td>
+                                                                        <a href="tel:{{doctor.PHONE}}" class="text-decoration-none text-primary">{{doctor.PHONE}}</a>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                        <p>Would you like to confirm your appointment on <strong>{{doctor.DATE}}</strong> at <strong>{{appointment.TIME}}</strong>?</p>
+                                                        <p style="color:#4fa284">You will receive a confirmation email shortly after your appointment is verified.</p>
+                                                    </div>
+
+                                                    <div class="modal-footer border-0">
+                                                        <button id="submitBtnConfirmAppointment" class="btn shadow" style="background-color:#fdfdfd; color:#4fa284" data-bs-dismiss="modal">
+                                                            Confirm Appointment
+                                                        </button>
+                                                        <button type="button" class="btn shadow" data-bs-dismiss="modal" style="background-color:#fdfdfd; color:#4fa284">Close</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    {{/each}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{{/each}}
+<input type="hidden" id="categoryIdDoctorList" name="categoryIdDoctorList" value="">
+<input type="hidden" id="doctorIdDoctorList" name="doctorIdDoctorList" value="">
+<input type="hidden" id="dateTimeDoctorList" name="dateTimeDoctorList" value="">
+<input type="hidden" id="startTimeDoctorList" name="startTimeDoctorList" value="">

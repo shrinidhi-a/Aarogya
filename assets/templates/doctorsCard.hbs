@@ -1,0 +1,158 @@
+<div class="row">
+    {{#each this}}
+        <div class="mt-3">
+            <div class="card shadow border border-0">
+                <div class="card-body">
+                    <div class="mt-4" id="displayAppointmentInfo_">
+                        <p class="card-text">
+                            <b>Name:</b>
+                            {{FULLNAME}}
+                            <br />
+                            <b>Qualification:</b>
+                            {{QUALIFICATION}}
+                            <br />
+                            <b>Email:</b>
+                            {{EMAIL}}
+                            <br />
+                            <b>Phone:</b>
+                            {{PHONE}}
+                        </p>
+
+                        <div id="messageDivRemoveDoc_{{@key}}" class="alert mt-3 shadow d-none">
+                            <p>Do you want to remove doctor from Aarogya?</p>
+                            <button
+                                class="btn shadow btn-sm"
+                                type="button"
+                                id="confirmRemoveDoc_{{@key}}"
+                                style="background-color:#fdfdfd; color:#4fa284"
+                            >Yes</button>
+                            <button
+                                class="btn shadow btn-sm"
+                                type="button"
+                                id="cancelRemoveDoc_{{@key}}"
+                                style="background-color:#fdfdfd; color:#4fa284"
+                            >No</button>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button
+                                class="btn shadow btn-sm"
+                                type="button"
+                                id=""
+                                style="background-color:#fdfdfd; color:#4fa284"
+                                data-bs-toggle="modal"
+                                data-bs-target="#exampleModalEditDoctor_{{@key}}"
+                            >Update Information</button>
+                            <button
+                                class="btn shadow btn-sm"
+                                type="button"
+                                id="confirmedRemoveDoc_{{@key}}"
+                                style="background-color:#fdfdfd; color:#4fa284"
+                            >Remove Doctor</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div
+            class="modal fade"
+            id="exampleModalEditDoctor_{{@key}}"
+            tabindex="-1"
+            data-bs-backdrop="static"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+        >
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header border-0">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body">
+
+                        <div class="pt-4 pb-2">
+                            <h5 class="card-title text-center pb-0 fs-4">Update Doctor information</h5>
+                            <p class="text-center small">Please fill the details below to update doctor information.</p>
+                            <div id="messageDivUpdateDoctorMadal_{{@key}}" class="alert"></div>
+                        </div>
+
+                        <form class="row g-3" novalidate>
+
+                            <div class="col-12">
+                                <label for="yourNameDoctor_{{@key}}" class="form-label">Full Name</label>
+                                <input
+                                    type="text"
+                                    name="name"
+                                    value="{{FULLNAME}}"
+                                    class="form-control"
+                                    id="yourNameDoctor_{{@key}}"
+                                    required
+                                />
+                                <div class="invalid-feedback"></div>
+                            </div>
+                            <div class="col-12">
+                                <label for="yourEmailDoctor_{{@key}}" class="form-label">Email Address</label>
+                                <div class="input-group has-validation">
+                                    <span class="input-group-text" id="inputGroupPrepend">@</span>
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        value="{{EMAIL}}"
+                                        class="form-control"
+                                        id="yourEmailDoctor_{{@key}}"
+                                        required
+                                    />
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <label for="yourPhoneNumberDoctor_{{@key}}" class="form-label">Phone Number</label>
+                                <div class="input-group has-validation">
+                                    <input
+                                        type="tel"
+                                        name="phoneNumber"
+                                        class="form-control"
+                                        value="{{PHONE}}"
+                                        id="yourPhoneNumberDoctor_{{@key}}"
+                                        required
+                                    />
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <label for="yourQualificationDoctor_{{@key}}" class="form-label">Qualification</label>
+                                <input
+                                    type="text"
+                                    name="specialization"
+                                    class="form-control"
+                                    value="{{QUALIFICATION}}"
+                                    id="yourQualificationDoctor_{{@key}}"
+                                    required
+                                />
+                                <div class="invalid-feedback"></div>
+                            </div>
+                            <div class="col-12" id="categoryDropDownNewDoc"></div>
+                        </form>
+                        <div class="modal-footer border-0">
+                            <button
+                                id="submitBtnUpdateDoctor_{{@key}}"
+                                class="btn shadow"
+                                style="background-color:#fdfdfd; color:#4fa284"
+                            >
+                                Update Doctor information
+                            </button>
+                            <button
+                                type="button"
+                                class="btn shadow"
+                                data-bs-dismiss="modal"
+                                style="background-color:#fdfdfd; color:#4fa284"
+                            >Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    {{/each}}
+</div>

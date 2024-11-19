@@ -1,0 +1,89 @@
+<div class="row">
+    {{#each this}}
+        <div class="mt-4">
+            <div class="card shadow border-0">
+                {{!-- <div class="card-header bg-light">
+                <p class="mb-0">Appointment - #{{key}}</p>
+            </div> --}}
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-8">
+                            <h5>Appointment - #{{key}}</h5>
+                            <small id="displayAppointmentDateInfo_{{key}}" class="">On
+                                {{formatDate DATEANDTIME}}
+                                at
+                                {{formatTime DATEANDTIME}}</small>
+                        </div>
+                        <div class="col-4">
+                            <h5
+                                class="d-flex align-items-center justify-content-md-end mx-4"
+                                id="displayAppointmentInfoBtn_{{key}}"
+                                style="height: 100%; cursor:pointer;"
+                            >
+                                🞃
+                            </h5>
+                        </div>
+                    </div>
+
+                    <div class="d-none mt-4" id="displayAppointmentInfo_{{key}}">
+                        <div class="row">
+                            <div class="col">
+                                <h6>Appointment Information:</h6>
+                                <p class="card-text">
+                                    Date:
+                                    {{formatDate DATEANDTIME}}
+                                    <br />
+                                    Time:
+                                    {{formatTime DATEANDTIME}}
+                                    <br />
+                                </p>
+                            </div>
+
+                            <div class="col">
+                                <h6>Doctor Information:</h6>
+                                <p class="card-text">
+                                    Name:
+                                    {{DOCTOR.FULLNAME}}
+                                    <br />
+                                    Qualification:
+                                    {{DOCTOR.QUALIFICATION}}
+                                    <br />
+                                    Email:
+                                    <a href="mailto:{{DOCTOR.EMAIL}}">{{DOCTOR.EMAIL}}</a>
+                                    <br />
+                                    Phone:
+                                    <a href="tel:{{DOCTOR.PHONE}}">{{DOCTOR.PHONE}}</a>
+                                    <br />
+                                </p>
+                            </div>
+
+                            <div class="col">
+                                <h6>Patient Information:</h6>
+                                <p class="card-text">
+                                    Name:
+                                    {{USER.FULLNAME}}
+                                    <br />
+                                    Email:
+                                    <a href="mailto:{{USER.EMAIL}}">{{USER.EMAIL}}</a>
+                                    <br />
+                                    Phone:
+                                    <a href="tel:{{USER.PHONE}}">{{USER.PHONE}}</a>
+                                    <br />
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button
+                                class="btn shadow btn-sm"
+                                type="button"
+                                id="downloadReport_{{key}}"
+                                style="background-color:#fdfdfd; color:#4fa284"
+                            >Download Report </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {{/each}}
+</div>

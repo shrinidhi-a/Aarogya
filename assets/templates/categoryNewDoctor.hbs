@@ -1,0 +1,8 @@
+<label for="categorySelectNewDoc" class="form-label">Select Category</label>
+<select name="category" class="form-control" id="categorySelectNewDoc" required>
+    <option value="default" disabled selected>-- Click here --</option>
+    {{#each this}}
+        <option value="{{@key}}">{{this}}</option>
+    {{/each}}
+</select>
+<div class="invalid-feedback"></div>

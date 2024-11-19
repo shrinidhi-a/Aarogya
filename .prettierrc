@@ -1,0 +1,19 @@
+{
+    "tabWidth": 4,
+    "useTabs": false,
+    "printWidth": 120,
+    "overrides": [
+        {
+            "files": "*.cfc",
+            "options": {
+                "parser": "babel"
+            }
+        },
+        {
+            "files": "*.cfm",
+            "options": {
+                "parser": "html"
+            }
+        }
+    ]
+}

@@ -1,0 +1,150 @@
+<div class="row">
+    {{#each this}}
+        <div class="mt-4">
+            <div class="card shadow border border-0">
+                {{!-- <div class="card-header bg-light">
+                <p class="mb-0">Appointment - #{{key}}</p>
+            </div> --}}
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-8">
+                            <h5>Appointment - #{{key}}</h5>
+                            <small id="displayAppointmentDateInfo_{{key}}" class="">On
+                                {{DATE}}
+                                at
+                                {{TIME}}</small>
+                        </div>
+                        <div class="col-4">
+                            <h5
+                                class="d-flex align-items-center justify-content-md-end mx-4"
+                                id="displayAppointmentInfoBtn_{{key}}"
+                                style="height: 100%; cursor:pointer;"
+                            >
+                                🞃
+                            </h5>
+                        </div>
+                    </div>
+                    <div class="d-none mt-4" id="displayAppointmentInfo_{{key}}">
+                        <div class="row">
+                            <div class="col">
+                                <h6>Appointment Information:</h6>
+                                <p class="card-text">
+                                    Date:
+                                    {{DATE}}
+                                    <br />
+                                    Time:
+                                    {{TIME}}
+                                    <br />
+                                </p>
+                            </div>
+                            <div class="col">
+                                <h6>Doctor Information:</h6>
+                                <p class="card-text">
+                                    Name:
+                                    {{DOCTOR.FULLNAME}}
+                                    <br />
+                                    Qualification:
+                                    {{DOCTOR.QUALIFICATION}}
+                                    <br />
+                                    Email:
+                                    <a href="mailto:{{DOCTOR.EMAIL}}">{{DOCTOR.EMAIL}}</a>
+                                    <br />
+                                    Phone:
+                                    <a href="tel:{{DOCTOR.PHONE}}">{{DOCTOR.PHONE}}</a>
+                                    <br />
+                                </p>
+                            </div>
+                        </div>
+                        {{!-- <div id="dateTimeInputCardContainer_{{key}}" class="alert shadow col-12 mb-3 mt-3 d-none">
+                            <label for="dateTimeInputCard_{{key}}" class="form-label">Please Enter Reshedule Date and
+                                time:</label>
+                            <input
+                                type="datetime-local"
+                                name="dateTime"
+                                class="form-control"
+                                id="dateTimeInputCard_{{key}}"
+                                required
+                            />
+                            <div class="invalid-feedback"></div>
+                            <button
+                                class="btn shadow btn-sm mt-3"
+                                type="button"
+                                id="dateTimeInputCardConfirm_{{key}}"
+                                style="background-color:#fdfdfd; color:#4fa284"
+                            >Confirm Reschedule</button>
+                            <button
+                                class="btn shadow btn-sm mt-3"
+                                type="button"
+                                id="dateTimeInputCardCancel_{{key}}"
+                                style="background-color:#fdfdfd; color:#4fa284"
+                            >Cancel</button>
+                        </div> --}}
+
+                        <div id="messageDivCancel_{{key}}" class="alert mt-3 shadow d-none">
+                            <p>Do you want to cancel appointment?</p>
+                            <button
+                                class="btn shadow btn-sm"
+                                type="button"
+                                id="messageDivCancelYes_{{key}}"
+                                style="background-color:#fdfdfd; color:#4fa284"
+                            >Yes</button>
+                            <button
+                                class="btn shadow btn-sm"
+                                type="button"
+                                id="messageDivCancelNo_{{key}}"
+                                style="background-color:#fdfdfd; color:#4fa284"
+                            >No</button>
+                        </div>
+
+                        <div class="text-center mt-3 mb-3">
+                            <p class="card-text" id="prescriptionMessage_{{key}}"></p>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            {{#if (eqCase APPOINTMENTSTATUS "completed")}}
+
+                                <button
+                                    class="btn shadow btn-sm"
+                                    type="button"
+                                    id="completedPrescription_{{key}}"
+                                    style="background-color:#fdfdfd; color:#4fa284"
+                                >Download Prescription</button>
+                            {{else if (eqCase APPOINTMENTSTATUS "confirmed")}}
+                                <button
+                                    class="btn shadow btn-sm"
+                                    type="button"
+                                    id="confirmedCancel_{{key}}"
+                                    style="background-color:#fdfdfd; color:#4fa284"
+                                >Cancel</button>
+                            {{else if (eqCase APPOINTMENTSTATUS "cancelled")}}
+                                <button
+                                    class="btn shadow btn-sm"
+                                    type="button"
+                                    id="cancelledReschedule_{{key}}"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#ResheduleModal"
+                                    style="background-color:#fdfdfd; color:#4fa284"
+                                >Reschedule Appointment</button>
+                            {{else}}
+                                <button
+                                    class="btn shadow btn-sm"
+                                    type="button"
+                                    id="pendingReschedule_{{key}}"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#ResheduleModal"
+                                    style="background-color:#fdfdfd; color:#4fa284"
+                                >Reschedule Appointment</button>
+                                <button
+                                    class="btn shadow btn-sm"
+                                    type="button"
+                                    id="pendingCancel_{{key}}"
+                                    style="background-color:#fdfdfd; color:#4fa284"
+                                >Cancel</button>
+                            {{/if}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {{/each}}
+</div>
