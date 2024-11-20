@@ -101,7 +101,7 @@ component output="true"{
     {
         local.response = {
             message: '',
-            user:'',
+            userRole:'',
             success: false
         };
 
@@ -132,7 +132,7 @@ component output="true"{
 
                         local.loginUser.updateSessionDetails(arguments.email, session.SessionID){
                             local.response.message = "Logged in successfully";
-                            local.response.user = "Logged in successfully";
+                            local.response.userRole = local.userDetails.UserRole;
                             local.response.success = true;
                         }
                             

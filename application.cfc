@@ -66,6 +66,12 @@ component {
                 applicationStop();
                 cflocation(url="index.cfm?action=home", addToken=false);
             }
+
+            if(structKeyExists(session, "isLoggedIn") && session.isLoggedIn && action == "landing"){
+                if(structKeyExists(session, "role") && session.role == "admin"){
+                    cflocation(url="index.cfm?action=profile", addToken=false);
+                }
+            }
             
             if (structKeyExists(session, "isLoggedIn") && !session.isLoggedIn && listFindNoCase('landing,profile,newAppointment,newDoctor,newCategory,myprofile,manageDoctors,manageCategory,reports', action)) {
                 request.path = allowedActions["login"];

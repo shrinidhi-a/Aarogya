@@ -68,8 +68,7 @@
             </cfif>
                 
         <cfelse>
-<!---             <cfif structKeyExists(url, "action") AND url.action NEQ "profile"> --->
-            <cfif structKeyExists(url, "action") AND url.action NEQ "landing">
+            <cfif structKeyExists(session, "role") AND session.role == "patient" AND structKeyExists(url, "action") AND url.action NEQ "landing">
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -77,6 +76,18 @@
                         <a class="nav-link active" aria-current="page" style="color: #4fa284;" href="./index.cfm?action=landing">Go Back to Home</a>
                     </li>
                 </ul>
+
+            </cfif>
+
+            <cfif structKeyExists(session, "role") AND session.role == "admin" AND structKeyExists(url, "action") AND url.action NEQ "profile">
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" style="color: #4fa284;" href="./index.cfm?action=landing">Go Back to Home</a>
+                        </li>
+                    </ul>
+                    
             </cfif>
                 
                         <!--- <a class="nav-link d-flex align-items-center pe-0 mx-3" href="#" data-bs-toggle="dropdown">

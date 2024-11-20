@@ -18,7 +18,9 @@ $(document).ready(function () {
             data: formData,
             dataType: "json",
             success: function (response) {
+                console.log(response);
                 const isSuccess = response.SUCCESS;
+                const userRole = response.USERROLE;
                 const message = isSuccess ? "logged in successfully" : "log in failed: " + response.MESSAGE;
                 $messageDiv
                     .removeClass(isSuccess ? "alert-danger" : "alert-success")
@@ -26,8 +28,9 @@ $(document).ready(function () {
                     .html(message)
                     .show();
 
-                if (isSuccess) {
-                    // window.location.href = "./index.cfm?action=profile";
+                if (isSuccess && userRole == "admin") {
+                    window.location.href = "./index.cfm?action=profile";
+                } else {
                     window.location.href = "./index.cfm?action=landing";
                 }
             },
