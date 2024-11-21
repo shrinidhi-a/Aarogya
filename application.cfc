@@ -26,6 +26,10 @@ component {
             "CATEGORY_STATUS_UNAVAILABLE" : "unavailable"
         });
 
+        // var OnStartComponentInstance = createObject("component", "model.onStartEvents")
+        // var resultgetInproperStatuses = OnStartComponentInstance.getInproperStatuses()
+        // writeLog(file="AarogyaInfos", text=resultgetInproperStatuses);
+
         return true;
     }
 
