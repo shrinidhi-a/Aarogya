@@ -58,19 +58,18 @@ $(document).ready(function () {
                     window.location.href = "./index.cfm?action=restart";
                 }
                 const isSuccess = response.SUCCESS;
-                const message = isSuccess
-                    ? "Information Updated successfully"
-                    : "Information Update failed: " + response.MESSAGE;
+                // const message = isSuccess
+                //     ? "Information Updated successfully"
+                //     : "Information Update failed: " + response.MESSAGE;
 
-                $messageDiv
-                    .removeClass(isSuccess ? "alert-danger" : "alert-success")
-                    .addClass(isSuccess ? "alert-success" : "alert-danger")
-                    .html(message);
+                // $messageDiv
+                //     .removeClass(isSuccess ? "alert-danger" : "alert-success")
+                //     .addClass(isSuccess ? "alert-success" : "alert-danger")
+                //     .html(message);
 
                 if (isSuccess) {
-                    setTimeout(() => {
-                        window.location.href = "./index.cfm?action=profile";
-                    }, 3000);
+                    alert(response.MESSAGE);
+                    window.location.href = "./index.cfm?action=profile";
                 }
             },
             error: function (xhr, status, error) {
@@ -104,19 +103,24 @@ $(document).ready(function () {
                     window.location.href = "./index.cfm?action=restart";
                 }
                 const isSuccess = response.SUCCESS;
-                const message = isSuccess
-                    ? "Information Updated successfully"
-                    : "Information Update failed: " + response.MESSAGE;
+                // const message = isSuccess
+                //     ? "Information Updated successfully"
+                //     : "Information Update failed: " + response.MESSAGE;
 
-                $messageDiv
-                    .removeClass(isSuccess ? "alert-danger" : "alert-success")
-                    .addClass(isSuccess ? "alert-success" : "alert-danger")
-                    .html(message);
+                // $messageDiv
+                //     .removeClass(isSuccess ? "alert-danger" : "alert-success")
+                //     .addClass(isSuccess ? "alert-success" : "alert-danger")
+                //     .html(message);
+
+                // if (isSuccess) {
+                //     setTimeout(() => {
+                //         window.location.href = "./index.cfm?action=profile";
+                //     }, 3000);
+                // }
 
                 if (isSuccess) {
-                    setTimeout(() => {
-                        window.location.href = "./index.cfm?action=profile";
-                    }, 3000);
+                    alert(response.MESSAGE);
+                    window.location.href = "./index.cfm?action=profile";
                 }
             },
             error: function (xhr, status, error) {
@@ -149,19 +153,24 @@ $(document).ready(function () {
                     window.location.href = "./index.cfm?action=restart";
                 }
                 const isSuccess = response.SUCCESS;
-                const message = isSuccess
-                    ? "Password Updated successfully"
-                    : "Password Update failed: " + response.MESSAGE;
+                // const message = isSuccess
+                //     ? "Password Updated successfully"
+                //     : "Password Update failed: " + response.MESSAGE;
 
-                $messageDiv
-                    .removeClass(isSuccess ? "alert-danger" : "alert-success")
-                    .addClass(isSuccess ? "alert-success" : "alert-danger")
-                    .html(message);
+                // $messageDiv
+                //     .removeClass(isSuccess ? "alert-danger" : "alert-success")
+                //     .addClass(isSuccess ? "alert-success" : "alert-danger")
+                //     .html(message);
+
+                // if (isSuccess) {
+                //     setTimeout(() => {
+                //         window.location.href = "./index.cfm?action=profile";
+                //     }, 3000);
+                // }
 
                 if (isSuccess) {
-                    setTimeout(() => {
-                        window.location.href = "./index.cfm?action=profile";
-                    }, 3000);
+                    alert(response.MESSAGE);
+                    window.location.href = "./index.cfm?action=profile";
                 }
             },
             error: function (xhr, status, error) {
