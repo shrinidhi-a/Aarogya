@@ -9,6 +9,32 @@ $(document).ready(function () {
         });
     }
 
+    function handlebarsNotification(context) {
+        $.get("./assets/templates/notificationAdmin.hbs", function (templateData) {
+            var source = templateData;
+            var template = Handlebars.compile(source);
+            var html = template(context);
+            $("#notificationButtonAdmin").html(html);
+        });
+    }
+
+    getAdminNotification();
+
+    function getAdminNotification() {
+        $.ajax({
+            type: "POST",
+            url: "./controllers/appointmentServices.cfc?method=getNotificationData",
+            dataType: "json",
+            success: function (response) {
+                console.log(response);
+                handlebarsNotification(response.DATA);
+            },
+            error: function (xhr, status, error) {
+                console.warn("AJAX error: " + error);
+            },
+        });
+    }
+
     //Getting appointment details.
     function appointmentDetails(status) {
         const formData = { status };
@@ -127,6 +153,7 @@ $(document).ready(function () {
         $(".nav-link").removeClass("active");
         $(this).addClass("active");
         appointmentDetails("pending");
+        getAdminNotification();
     });
 
     $("#confirmedApp-tab").click(function (e) {
@@ -134,6 +161,7 @@ $(document).ready(function () {
         $(".nav-link").removeClass("active");
         $(this).addClass("active");
         appointmentDetails("confirmed");
+        getAdminNotification();
     });
 
     $("#completedApp-tab").click(function (e) {
@@ -141,6 +169,7 @@ $(document).ready(function () {
         $(".nav-link").removeClass("active");
         $(this).addClass("active");
         appointmentDetails("completed");
+        getAdminNotification();
     });
 
     $("#concelledApp-tab").click(function (e) {
@@ -148,6 +177,7 @@ $(document).ready(function () {
         $(".nav-link").removeClass("active");
         $(this).addClass("active");
         appointmentDetails("cancelled");
+        getAdminNotification();
     });
 
     $("#no-show-tab").click(function (e) {
@@ -155,6 +185,7 @@ $(document).ready(function () {
         $(".nav-link").removeClass("active");
         $(this).addClass("active");
         appointmentDetails("NoShow");
+        getAdminNotification();
     });
 
     //Sorting the appointment list to display in the admin profile page.
@@ -310,6 +341,7 @@ $(document).ready(function () {
                         if (response.SUCCESS) {
                             $(`#messageDivComplete_${key}`).addClass("d-none");
                             appointmentDetails(status);
+                            getAdminNotification();
                         } else {
                             console.log(response.MESSAGE);
                         }
@@ -356,6 +388,7 @@ $(document).ready(function () {
                         }
                         if (response.SUCCESS) {
                             appointmentDetails(status);
+                            getAdminNotification();
                         } else {
                             console.log(response.MESSAGE);
                         }
@@ -404,6 +437,7 @@ $(document).ready(function () {
                         if (response.SUCCESS) {
                             $(`#messageDivCancel_${key}`).addClass("d-none");
                             appointmentDetails(status);
+                            getAdminNotification();
                         } else {
                             console.log(response.MESSAGE);
                         }
@@ -452,6 +486,7 @@ $(document).ready(function () {
                         if (response.SUCCESS) {
                             $(`#messageDivAccept_${key}`).addClass("d-none");
                             appointmentDetails(status);
+                            getAdminNotification();
                         } else {
                             console.log(response.MESSAGE);
                         }
@@ -503,6 +538,7 @@ $(document).ready(function () {
                         if (response.SUCCESS) {
                             $(`#messageDivNotify_${key}`).addClass("d-none");
                             appointmentDetails(status);
+                            getAdminNotification();
                         } else {
                             console.log(response.MESSAGE);
                         }
@@ -568,6 +604,7 @@ $(document).ready(function () {
                     window.location.href = "./index.cfm?action=restart";
                 }
                 appointmentDetails("completed");
+                getAdminNotification();
                 const isSuccess = response.SUCCESS;
                 $messageDivPrescription
                     .removeClass(isSuccess ? "alert-danger" : "alert-success")

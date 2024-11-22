@@ -1,47 +1,44 @@
 <cfif structKeyExists(session, "isLoggedIn") AND session.role == 'admin'>
     <main id="main" class="main">
         <!--- <div class="card w-90 mb-3 mt-7 mx-3" id="profile-content" style="margin-top: 70px;"></div> --->
-        <div class="card w-90 mb-3 mt-7 mx-3 border-0" style="margin-top: 70px;">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-8">
-                        <h4>Appointments</h4>
-                    </div>
-                    <div class="col-4">
-                        <!--- <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                            <button class="btn btn-primary me-md-2 btn-sm" type="button" id="AddDoctorAdmin" style="background-color:#4fa284; color:#1a4041">Add New Doctor</button>
-                            <button class="btn btn-primary btn-sm" type="button" id="AddCategoryAdmin" style="background-color:#4fa284; color:#1a4041">Add New Category</button>
-                        </div> --->
-                    </div>
-                </div>
-                <ul class="nav nav-underline">
-                    <li class="nav-item">
-                        <a class="nav-link navColor active" aria-current="page" id="requests-tab" href="#">Appointment Requests</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link navColor" aria-current="page" id="confirmedApp-tab" href="#">Confirmed Appointments</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link navColor" aria-current="page" id="completedApp-tab" href="#">Completed Appointments</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link navColor" aria-current="page" id="concelledApp-tab" href="#">Cancelled Appointments</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link navColor" aria-current="page" id="no-show-tab" href="#">No-Show Appointments</a>
-                    </li>
-                </ul>
+        <div class="container mt-10">
+            <div class="card mb-3 border-0" style="margin-top: 70px;">
+                <div class="card-body">
 
-                <div class="flex-column align-items-center justify-content-center">
-
-                    <div class="row" id="appointmentsForAdmin"></div>
-
-                    <div class="text-center mt-3">
-                        <p class="card-text" id="noAppointmentAvailableVerify"></p>
+                    <div class="row">
+                        <div class="col d-flex mb-3 justify-content-between align-items-center">
+                            <ul class="nav nav-underline">
+                                <li class="nav-item">
+                                    <a class="nav-link navColor active" aria-current="page" id="requests-tab" href="#">Appointment Requests</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link navColor" aria-current="page" id="confirmedApp-tab" href="#">Confirmed Appointments</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link navColor" aria-current="page" id="completedApp-tab" href="#">Completed Appointments</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link navColor" aria-current="page" id="concelledApp-tab" href="#">Cancelled Appointments</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link navColor" aria-current="page" id="no-show-tab" href="#">No-Show Appointments</a>
+                                </li>
+                            </ul>
+                            <div id="notificationButtonAdmin"></div>
+                        </div>
                     </div>
-                    
-                </div>
-            </div>   
+
+                    <div class="flex-column align-items-center justify-content-center">
+
+                        <div class="row align-items-center justify-content-center" id="appointmentsForAdmin"></div>
+
+                        <div class="text-center mt-3">
+                            <p class="card-text" id="noAppointmentAvailableVerify"></p>
+                        </div>
+                        
+                    </div>
+                </div>   
+            </div>
         </div>
 
         <div
@@ -166,25 +163,25 @@
                                     </li>
                                 </ul>
                                 <div>
-                                <button class="btn shadow" id="filterActive" style="background-color:#fdfdfd; color:#4fa284" data-bs-toggle="modal" data-bs-target="#modalFilterActive">filter 
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-filter" viewBox="0 0 16 16">
-                                        <path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5m-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5"/>
-                                    </svg>
-                                </button>
-                                <button class="btn shadow mx-2" id="sortActive" style="background-color:#fdfdfd; color:#4fa284">
-                                    <!-- Sort Down Icon (Visible by Default) -->
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-sort-down sort-icon sort-down" viewBox="0 0 16 16">
-                                        <path d="M3.5 2.5a.5.5 0 0 0-1 0v8.793l-1.146-1.147a.5.5 0 0 0-.708.708l2 1.999.007.007a.497.497 0 0 0 .7-.006l2-2a.5.5 0 0 0-.707-.708L3.5 11.293zm3.5 1a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5M7.5 6a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1z"/>
-                                    </svg>
-                                    
-                                    <!-- Sort Up Icon (Hidden by Default) -->
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-sort-up sort-icon sort-up d-none" viewBox="0 0 16 16">
-                                        <path d="M3.5 12.5a.5.5 0 0 1-1 0V3.707L1.354 4.854a.5.5 0 1 1-.708-.708l2-1.999.007-.007a.5.5 0 0 1 .7.006l2 2a.5.5 0 1 1-.707.708L3.5 3.707zm3.5-9a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5M7.5 6a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1z"/>
-                                    </svg>
-                                </button>
+                                    <button class="btn shadow" id="filterActive" style="background-color:#fdfdfd; color:#4fa284" data-bs-toggle="modal" data-bs-target="#modalFilterActive">filter 
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-filter" viewBox="0 0 16 16">
+                                            <path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5m-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5"/>
+                                        </svg>
+                                    </button>
+                                    <button class="btn shadow mx-2" id="sortActive" style="background-color:#fdfdfd; color:#4fa284">
+                                        <!-- Sort Down Icon (Visible by Default) -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-sort-down sort-icon sort-down" viewBox="0 0 16 16">
+                                            <path d="M3.5 2.5a.5.5 0 0 0-1 0v8.793l-1.146-1.147a.5.5 0 0 0-.708.708l2 1.999.007.007a.497.497 0 0 0 .7-.006l2-2a.5.5 0 0 0-.707-.708L3.5 11.293zm3.5 1a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5M7.5 6a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1z"/>
+                                        </svg>
+                                        
+                                        <!-- Sort Up Icon (Hidden by Default) -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-sort-up sort-icon sort-up d-none" viewBox="0 0 16 16">
+                                            <path d="M3.5 12.5a.5.5 0 0 1-1 0V3.707L1.354 4.854a.5.5 0 1 1-.708-.708l2-1.999.007-.007a.5.5 0 0 1 .7.006l2 2a.5.5 0 1 1-.707.708L3.5 3.707zm3.5-9a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5M7.5 6a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1z"/>
+                                        </svg>
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
                         <div class="row" id="appointmentsListNew"></div>
 

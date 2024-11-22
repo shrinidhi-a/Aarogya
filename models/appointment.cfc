@@ -768,4 +768,93 @@ component {
         }
     }
 
+
+    // NOTE: Updated with new Database.
+    public struct function getNotificationData() {
+        local.data = structNew();
+    
+        try {
+
+            local.queryStr =    "SELECT AppointmentID, AppointmentStatus, DateAndTime, StartTime
+                                FROM Appointments
+                                WHERE AppointmentStatus IN (:pending, :confirmed) 
+                                AND (DateAndTime < :today OR (DateAndTime = :today AND StartTime < :currentTime))";
+
+
+            local.queryParams = {
+                today: dateFormat(now(), "yyyy-MM-dd"),
+                currentTime: timeFormat(now(), "HH:mm:ss"),
+                pending: application.APPOINTMENT_STATUS_PENDING,
+                confirmed: application.APPOINTMENT_STATUS_CONFIRMED
+            }
+            
+            // if (arguments.status != "") {
+            //     local.queryStr &= " AND LOWER(a.AppointmentStatus) = LOWER(:status) ";
+            //     local.queryParams.status = arguments.status;
+            // }
+
+            // local.queryStr &= "AND (a.DateAndTime < :today OR (a.DateAndTime = :today AND a.StartTime < :currentTime)) ORDER BY a.DateAndTime ASC, a.StartTime ASC";
+
+            // Add date condition
+            // if (len(trim(arguments.date))) {
+            //     if(trim(arguments.date) EQ dateFormat(now(), "yyyy-MM-dd")){
+            //         local.queryStr &= " AND a.DateAndTime = :today AND a.StartTime < :currentTime ORDER BY a.DateAndTime ASC, a.StartTime ASC";
+            //         local.queryParams.today = dateFormat(now(), "yyyy-MM-dd");
+            //     }else{
+            //         local.queryStr &= " AND a.DateAndTime = :date ORDER BY a.DateAndTime ASC, a.StartTime ASC";
+            //         local.queryParams.date = arguments.date;
+            //     }
+            // } else {
+            //     local.queryStr &= " AND (a.DateAndTime < :today OR (a.DateAndTime = :today AND a.StartTime < :currentTime)) ORDER BY a.DateAndTime ASC, a.StartTime ASC";
+            //     local.queryParams.today = dateFormat(now(), "yyyy-MM-dd");
+            // }
+
+            local.appointmentInfo = queryExecute(local.queryStr, local.queryParams);
+    
+            if (local.appointmentInfo.recordCount > 0) {
+                for (local.row in local.appointmentInfo) {
+
+                    local.formattedDate = dateFormat(local.row.DateAndTime, "yyyy-MM-dd");
+                    local.timeOnly = timeFormat(local.row.StartTime, "hh:mm tt");
+
+                    
+
+                    local.holdData[local.row.AppointmentID] = {
+                        // Date: local.formattedDate,
+                        // Time: local.timeOnly,
+                        // CreatedAt: local.row.CreatedAt,
+                        // AppointmentStatus: local.row.AppointmentStatus,
+                        // DATAAVAILABLE: true,
+                        // Doctor: {
+                        //     FullName: local.row.FullName,
+                        //     DoctorID: local.row.DoctorID,
+                        //     Qualification: local.row.Qualification,
+                        //     Email: local.row.Email,
+                        //     Phone: local.row.Phone,
+                        //     ImagePath: local.row.imagePath
+                        // },
+                        // CategoryName: local.row.CategoryName,
+                        // APPOINTMENTID: local.row.AppointmentID
+                        // Count: local.appointmentInfo.recordCount,
+                        // DATAAVAILABLE: true,
+                        APPOINTMENTTIME: local.timeOnly,
+                        APPOINTMENTDATE: local.formattedDate,
+                        AppointmentId: local.row.AppointmentID,
+                        Status: local.row.AppointmentStatus
+                    };
+                    local.data["COUNT"] = local.appointmentInfo.recordCount;
+                    local.data["DATAAVAILABLE"] = true;
+
+                }
+                local.data["DATA"] = local.holdData;
+            }else{
+                local.data["DATAAVAILABLE"] = false;
+            }
+            return local.data;
+        } catch (any e) {
+            writeLog(file="Aarogyalogs", text="Error fetching appointments: " & e.message & "; Details: " & e.detail);
+            return local.data;
+        }
+    }
+
 }

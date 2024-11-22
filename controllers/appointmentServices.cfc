@@ -668,5 +668,36 @@ component output="true"{
         return local.response;
     }
 
+    remote struct function getNotificationData()
+        returnformat="JSON" 
+    {
+
+        local.response = {
+            data: structNew(),
+            message: '',
+            success: false
+        };
+
+        try {
+            local.appointments = new model.appointment();
+
+            // Check for authenticated user with the correct role
+            if (!session.isLoggedIn || structKeyExists(session, "role") && session.role != "admin") {
+                local.response.message = "Unauthenticated access"; 
+                return local.response;
+            }
+
+            // Fetch appointment information based on status
+            local.response.data = local.appointments.getNotificationData();
+            local.response.message = "Successfully retrieved the notification details"; 
+            local.response.success = true;
+
+        } catch (any e) {
+            local.response.message = "Error: " & e.message;
+        }
+
+        return local.response;
+    }
+
 }
 

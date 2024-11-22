@@ -70,7 +70,7 @@ $(document).ready(function () {
             date: date,
         };
 
-        console.log(formData);
+        // console.log(formData);
 
         $.ajax({
             type: "POST",
