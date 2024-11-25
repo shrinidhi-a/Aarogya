@@ -130,11 +130,12 @@ component output="true"{
 
     // NOTE: Updated with Aarogya2.0
     remote struct function createNewDoctorProfile(
-        string name,
-        string email,
-        string phone,
-        string qualification,
-        string category
+        name,
+        file,
+        email,
+        phone,
+        qualification,
+        category
     ) 
         returnformat="JSON"
     {
@@ -163,12 +164,27 @@ component output="true"{
                 return local.response;
             }
 
+            local.uploadDirectory = expandPath("../uploads/images");
+
+            if (!directoryExists(local.uploadDirectory)) {
+                directoryCreate(local.uploadDirectory);
+            }
+
+            local.uploadedFilePath = fileUpload(
+                destination="#local.uploadDirectory#", 
+                fileField="file",
+                onConflict= "MakeUnique"
+            );
+
+            local.filePath = "/images/"& uploadedFilePath.serverFile;
+
             if (local.doctors.createNewDoctor(
                 arguments.name,
                 arguments.email,
                 arguments.phone,
                 arguments.qualification,
-                arguments.category
+                arguments.category,
+                local.filePath
             )) {
                 local.response.success = true;
                 local.response.message = "New doctor profile created successfully";

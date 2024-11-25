@@ -34,22 +34,43 @@ $(document).ready(function () {
     $(document).on("click", "#submitBtnNewDoctor", function (event) {
         event.preventDefault();
 
+        const name = $("#yourName").val();
+        const file = $("#fileUploadDoctor")[0].files[0] || null; // Changed to null
+        var email = $("#yourEmail").val();
+        const phone = $("#yourPhoneNumber").val();
+        const qualification = $("#yourQualification").val();
+        const category = $("#categorySelectNewDoc").val();
+
+        // console.log(file);
+        let formDetails = {
+            name,
+            file,
+            email,
+            phone,
+            qualification,
+            category,
+        };
+        var formData = new FormData();
+
+        for (var key in formDetails) {
+            if (formDetails.hasOwnProperty(key)) {
+                formData.append(key, formDetails[key]);
+            }
+        }
+
+        // Check final output
+        console.log(formData);
+
         if (!validateForm()) return;
 
         let $messageDiv = $("#messageDiv");
-
-        let formData = {
-            name: $("#yourName").val().trim(),
-            email: $("#yourEmail").val().trim(),
-            phone: $("#yourPhoneNumber").val().trim(),
-            qualification: $("#yourQualification").val().trim(),
-            category: $("#categorySelectNewDoc").val().trim(),
-        };
 
         $.ajax({
             type: "POST",
             url: "./controllers/doctorsServices.cfc?method=createNewDoctorProfile",
             data: formData,
+            processData: false,
+            contentType: false,
             dataType: "json",
             success: function (response) {
                 // console.log(response);
@@ -82,6 +103,7 @@ $(document).ready(function () {
                 validatePhoneNumber,
                 validateSpecialization,
                 validateCategory,
+                validateFile,
             ];
 
             const results = validators.map((validator) => validator());
@@ -137,6 +159,17 @@ $(document).ready(function () {
 
         function validateCategory() {
             return validateField("#categorySelectNewDoc", "Please Select Category");
+        }
+
+        function validateFile() {
+            var prescriptionInput = $("#fileUploadDoctor");
+            var prescriptionPath = prescriptionInput.val().toLowerCase();
+            var allowedExtensions = /(\.png|\.jpeg|\.jpg)$/i; // Include png, jpeg, and jpg
+            if (!allowedExtensions.exec(prescriptionPath)) {
+                showError("#fileUploadDoctor", "Please select a valid file (png, jpeg, or jpg).");
+                return false;
+            }
+            return true;
         }
     });
 });

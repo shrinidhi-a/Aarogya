@@ -64,6 +64,12 @@
                         <div class="invalid-feedback"></div>
                     </div>
 
+                    <div class="col-12">
+                        <label for="fileUploadDoctor" class="form-label">Choose Doctor image to upload</label>
+                        <input type="file" class="form-control" id="fileUploadDoctor" name="fileUpload" required/>
+                        <div class="invalid-feedback"></div>
+                    </div>
+
                     <div class="col-12" id="categoryDropDownNewDoc"></div>
                     </div>
                     <div class="modal-footer border-0">

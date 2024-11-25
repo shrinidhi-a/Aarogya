@@ -142,7 +142,8 @@ component {
         string email,
         string phone,
         string qualification,
-        string category
+        string category,
+        string filePath
     ) {
 
         try {
@@ -152,21 +153,24 @@ component {
                     FullName,
                     Qualification,
                     Email,
-                    Phone
+                    Phone,
+                    imagePath
                 )
                 VALUES(
                     :CategoryID,
                     :FullName,
                     :qualification,
                     :Email,
-                    :Phone
+                    :Phone,
+                    :imagePath
                 )",
                 {
                     CategoryID:arguments.category,
                     FullName:arguments.name,
                     qualification:arguments.qualification,
                     Email:arguments.email,
-                    Phone:arguments.phone
+                    Phone:arguments.phone,
+                    imagePath:arguments.filePath
                 }
             );
             return true;
