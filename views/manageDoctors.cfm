@@ -1,5 +1,5 @@
 <main id="main" class="main">
-    <div class="card w-90 mb-3 mt-7 mx-3 min-vh-100 border-0" style="margin-top: 70px;">
+    <div class="container mb-3 mt-7 min-vh-100 border-0" style="margin-top: 80px;">
         <div class="card-body">
             <div class="row">
                 <div class="col-8">
@@ -14,7 +14,6 @@
             <br>
             <div id="categoryDropDownManageDoctor"></div>
             <div id="doctorsList"></div>
-            <div class="mt-5 text-center" id="doctorsDisplayInformation">Please select category to display doctors</div>
         </div>   
     </div>
 

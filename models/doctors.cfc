@@ -1,33 +1,44 @@
 component {
 
-    // NOTE: Updated with new Database.
     public struct function getDoctorsInfo(
-        string category
+    string category
     ) {
         local.data = structNew();
 
         try {
-            local.doctorInfo = queryExecute(
-            "SELECT DoctorID, FullName, Qualification, Email, Phone FROM Doctors WHERE CategoryID = :category AND WorkStatus = :workstatus",
-            {category: arguments.category, workstatus: application.DOCTOR_WORKSTATUS_AVAILABLE}
-        );
+            // Initialize SQL query and parameters
+            local.sql = "SELECT DoctorID, FullName, Qualification, Email, Phone, imagePath FROM Doctors WHERE WorkStatus = :workstatus";
+            local.params = { workstatus: application.DOCTOR_WORKSTATUS_AVAILABLE };
 
-        if (local.doctorInfo.recordCount > 0) {
-            for (local.row in local.doctorInfo) {
-                local.data[local.row.DoctorID] = {
-                    FullName: local.row.FullName,
-                    Qualification: local.row.Qualification,
-                    Email: local.row.Email,
-                    Phone: local.row.Phone
-                };
+            // Conditionally add CategoryID filter if a category is provided
+            if (len(trim(arguments.category))) {
+                local.sql &= " AND CategoryID = :category";
+                local.params["category"] = arguments.category;
             }
-        }
-        return local.data;
+
+            // Execute query
+            local.doctorInfo = queryExecute(local.sql, local.params);
+
+            // Populate data structure if records are found
+            if (local.doctorInfo.recordCount > 0) {
+                for (local.row in local.doctorInfo) {
+                    local.data[local.row.DoctorID] = {
+                        FullName: local.row.FullName,
+                        Qualification: local.row.Qualification,
+                        Email: local.row.Email,
+                        Phone: local.row.Phone,
+                        ImagePath: local.row.imagePath
+                    };
+                }
+            }
+
+            return local.data;
         } catch (any e) {
             writeLog(file="Aarogyalogs", text="Error fetching doctors: " & e.message);
             return structNew();
         }
     }
+
 
     // NOTE: Updated with new Database.
     public boolean function checkEmailExistsForOthers(

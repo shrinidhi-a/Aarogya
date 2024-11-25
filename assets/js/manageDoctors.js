@@ -36,15 +36,10 @@ $(document).ready(function () {
         });
     }
 
-    $(document).on("change", "#categorySelect", function (event) {
-        var selectedCategory = $(this).val();
-
-        console.log("Selected Category:", selectedCategory);
-
-        $(`#doctorsDisplayInformation`).addClass("d-none");
-
+    viewDoctors();
+    function viewDoctors(category = "") {
         let formData = {
-            category: selectedCategory,
+            category: category,
         };
 
         $.ajax({
@@ -102,7 +97,7 @@ $(document).ready(function () {
                             .on("click", `#confirmRemoveDoc_${key}`, function (event) {
                                 event.preventDefault();
                                 $(`#messageDivRemoveDoc_${key}`).addClass("d-none");
-                                removeDoctorDetails(key, selectedCategory);
+                                removeDoctorDetails(key, category);
                             });
                     }
                 }
@@ -111,6 +106,14 @@ $(document).ready(function () {
                 console.error("Error loading doctors:", error);
             },
         });
+    }
+
+    $(document).on("change", "#categorySelect", function (event) {
+        var selectedCategory = $(this).val();
+
+        console.log("Selected Category:", selectedCategory);
+
+        viewDoctors(selectedCategory);
     });
 
     function updateDoctorDetails(formData, key) {
@@ -163,7 +166,7 @@ $(document).ready(function () {
                     window.location.href = "./index.cfm?action=restart";
                 }
                 if (response.SUCCESS) {
-                    $("#categorySelect").val(selectedCategory).trigger("change");
+                    window.location.href = "./index.cfm?action=manageDoctors";
                 } else {
                     alert(response.MESSAGE);
                 }

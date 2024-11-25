@@ -1,6 +1,7 @@
 <label for="categorySelect" class="form-label">Select Category</label>
 <select name="category" class="form-control" id="categorySelect" required>
     <option value="default" disabled selected>-- Click here --</option>
+    <option value="">Select All</option>
     {{#each this}}
         <option value="{{@key}}">{{this}}</option>
     {{/each}}
