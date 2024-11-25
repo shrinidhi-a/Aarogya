@@ -54,50 +54,51 @@ $(document).ready(function () {
 
                 for (const key in doctorsData) {
                     if (doctorsData.hasOwnProperty(key)) {
-                        console.log(key);
-                        $(document)
-                            .off("click", `#confirmedRemoveDoc_${key}`)
-                            .on("click", `#confirmedRemoveDoc_${key}`, function (event) {
-                                event.preventDefault();
-                                $(`#messageDivRemoveDoc_${key}`).removeClass("d-none");
-                            });
+                        // Use a block-scoped variable to capture `key`
+                        let doctorKey = key;
 
                         $(document)
-                            .off("click", `#cancelRemoveDoc_${key}`)
-                            .on("click", `#cancelRemoveDoc_${key}`, function (event) {
+                            .off("click", `#submitBtnUpdateDoctor_${doctorKey}`)
+                            .on("click", `#submitBtnUpdateDoctor_${doctorKey}`, function (event) {
                                 event.preventDefault();
-                                $(`#messageDivRemoveDoc_${key}`).addClass("d-none");
-                            });
 
-                        $(document)
-                            .off("click", `#confirmedUpdateDoc_${key}`)
-                            .on("click", `#confirmedUpdateDoc_${key}`, function (event) {
-                                event.preventDefault();
-                                $(`#doctorInformationUpdateContainer_${key}`).removeClass("d-none");
-                            });
+                                console.log(doctorKey);
 
-                        $(document)
-                            .off("click", `#submitBtnUpdateDoctor_${key}`)
-                            .on("click", `#submitBtnUpdateDoctor_${key}`, function (event) {
-                                event.preventDefault();
-                                if (!validateForm(key)) return;
+                                if (!validateForm(doctorKey)) return;
 
-                                let formData = {
-                                    key: key,
-                                    name: $(`#yourNameDoctor_${key}`).val().trim(),
-                                    email: $(`#yourEmailDoctor_${key}`).val().trim(),
-                                    phone: $(`#yourPhoneNumberDoctor_${key}`).val().trim(),
-                                    qualification: $(`#yourQualificationDoctor_${key}`).val().trim(),
+                                const file = $(`#fileUploadUpdateDoctor_${doctorKey}`)[0].files[0] || null; // Changed to null
+                                const name = $(`#yourNameDoctor_${doctorKey}`).val().trim();
+                                const email = $(`#yourEmailDoctor_${doctorKey}`).val().trim();
+                                const phone = $(`#yourPhoneNumberDoctor_${doctorKey}`).val().trim();
+                                const qualification = $(`#yourQualificationDoctor_${doctorKey}`).val().trim();
+
+                                let formDetails = {
+                                    key: doctorKey,
+                                    name,
+                                    file,
+                                    email,
+                                    phone,
+                                    qualification,
                                 };
-                                updateDoctorDetails(formData, key);
+
+                                var formData = new FormData();
+
+                                for (var field in formDetails) {
+                                    if (formDetails.hasOwnProperty(field)) {
+                                        formData.append(field, formDetails[field]);
+                                    }
+                                }
+
+                                console.log(formData);
+
+                                updateDoctorDetails(formData, doctorKey);
                             });
 
                         $(document)
-                            .off("click", `#confirmRemoveDoc_${key}`)
-                            .on("click", `#confirmRemoveDoc_${key}`, function (event) {
+                            .off("click", `#confirmRemoveDoc_${doctorKey}`)
+                            .on("click", `#confirmRemoveDoc_${doctorKey}`, function (event) {
                                 event.preventDefault();
-                                $(`#messageDivRemoveDoc_${key}`).addClass("d-none");
-                                removeDoctorDetails(key, category);
+                                removeDoctorDetails(doctorKey, category);
                             });
                     }
                 }
@@ -124,6 +125,8 @@ $(document).ready(function () {
             url: "./controllers/doctorsServices.cfc?method=updateDoctorInfo",
             data: formData,
             dataType: "json",
+            processData: false,
+            contentType: false,
             success: function (response) {
                 // console.log(response);
                 if (response.SESSIONAVAILABLE == false) {

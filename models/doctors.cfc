@@ -67,39 +67,50 @@ component {
         }
     }
 
-    // NOTE: Updated with new Database.
     public boolean function updateDoctorInfo(
-        string key,
+        string id,
         string name,
         string email,
         string phone,
-        string qualification
-    ) 
-    {
+        string qualification,
+        string filePath
+    ) {
         try {
-    
-            queryExecute(
-                "UPDATE Doctors
+            // Initialize base query and parameters
+            local.sql = "
+                UPDATE Doctors
                 SET FullName = :FullName,
-                Email = :Email,
-                Phone = :Phone,
-                Qualification = :Qualification
-                WHERE DoctorID = :DoctorID",
-                {
-                    FullName: arguments.name,
-                    Email: arguments.email,
-                    Phone: arguments.phone,
-                    Qualification: arguments.qualification,
-                    DoctorID: arguments.key
-                }
-            );
-    
+                    Email = :Email,
+                    Phone = :Phone,
+                    Qualification = :Qualification";
+            local.params = {
+                FullName: arguments.name,
+                Email: arguments.email,
+                Phone: arguments.phone,
+                Qualification: arguments.qualification,
+                DoctorID: arguments.id
+            };
+
+            // Conditionally add the imagePath field if filePath has a value
+            if (len(trim(arguments.filePath))) {
+                local.sql &= ", imagePath = :imagePath";
+                local.params["imagePath"] = arguments.filePath;
+            }
+
+            // Add WHERE clause
+            local.sql &= " WHERE DoctorID = :DoctorID";
+
+            // Execute the query
+            queryExecute(local.sql, local.params);
+
             return true;
         } catch (any e) {
-            writeLog(file="Aarogyalogs", text="Error updating token: " & e.message & "; Details: " & e.detail);
+            // Log the error
+            writeLog(file = "Aarogyalogs", text = "Error updating doctor info: " & e.message & "; Details: " & e.detail);
             return false;
         }
     }
+
 
     // NOTE: Updated with new Database.
     public boolean function removeDoctorInfo(

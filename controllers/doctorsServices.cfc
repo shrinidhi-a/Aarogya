@@ -31,11 +31,12 @@ component output="true"{
 
     // NOTE: Updated with Aarogya2.0
     remote struct function updateDoctorInfo(
-        string key,
-        string name,
-        string email,
-        string phone,
-        string qualification
+        key,
+        file,
+        name,
+        email,
+        phone,
+        qualification
     ) 
     returnformat="JSON" 
     {
@@ -65,12 +66,41 @@ component output="true"{
                 return local.response;
             }
 
+            writeLog(file = "Aarogyalogs", text = arguments.file);
+
+            // Handle file upload if provided
+            local.filePath = "";
+            if (!isNull(arguments.file)) {
+                local.uploadDirectory = expandPath("../uploads/images");
+
+                // Ensure the upload directory exists
+                if (!directoryExists(local.uploadDirectory)) {
+                    directoryCreate(local.uploadDirectory);
+                }
+
+                // Handle file upload
+                try {
+                    local.uploadedFile = fileUpload(
+                        destination = local.uploadDirectory,
+                        fileField = "file",
+                        onConflict = "MakeUnique"
+                    );
+
+                    // Set the file path relative to the application
+                    local.filePath = "/images/" & local.uploadedFile.serverFile;
+                } catch (any e) {
+                    writeLog(file = "Aarogyalogs", text = "File upload failed: " & e.message);
+                    throw(type = "FileUploadException", message = "File upload failed.", detail = e.detail);
+                }
+            }
+
             if (local.update.updateDoctorInfo(
                 arguments.key,
                 arguments.name,
                 arguments.email,
                 arguments.phone,
-                arguments.qualification
+                arguments.qualification,
+                local.filePath
                 )) {
                 local.response.success = true;
                 local.response.message = "Doctor Details updated successfully";

@@ -183,6 +183,18 @@
                                 />
                                 <div class="invalid-feedback"></div>
                             </div>
+                            <div class="col-12">
+                                <label for="fileUploadUpdateDoctor_{{@key}}" class="form-label">Choose Doctor image to
+                                    upload</label>
+                                <input
+                                    type="file"
+                                    class="form-control"
+                                    id="fileUploadUpdateDoctor_{{@key}}"
+                                    name="fileUpload"
+                                    required
+                                />
+                                <div class="invalid-feedback"></div>
+                            </div>
                             <div class="col-12" id="categoryDropDownNewDoc"></div>
                         </form>
                         <div class="modal-footer border-0">
@@ -190,7 +202,6 @@
                                 id="submitBtnUpdateDoctor_{{@key}}"
                                 class="btn shadow"
                                 style="background-color:#fdfdfd; color:#4fa284"
-                                data-bs-dismiss="modal"
                             >
                                 Update Doctor information
                             </button>
