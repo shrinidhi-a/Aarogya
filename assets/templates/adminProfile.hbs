@@ -1,12 +1,13 @@
-<div class="col d-flex flex-column align-items-center justify-content-center">
-
-    <div class="card shadow border border-0 mb-3 mt-5 mx-2" style="height: auto; width:99%;">
+{{! <div class="col d-flex flex-column align-items-center justify-content-center"> }}
+<div class="row">
+    <h5 class="mt-5">Your Basic Information<span>&#10151;</span></h5>
+    <div class="card shadow border border-0 mb-3 mt-2">
         <div class="card-body">
-            <div class="pt-4 pb-2">
+            {{! <div class="pt-4 pb-2">
                 <h5 class="card-title text-center pb-0 fs-4">Your Basic Information</h5>
                 <p class="text-center small" style="color:#4fa284">You can update your basic information below</p>
                 <div id="messageDivBasic" class="alert"></div>
-            </div>
+            </div> }}
 
             <div class="col mt-2">
                 <label for="yourNametoUpdate" class="form-label">Full Name</label>
@@ -37,7 +38,7 @@
                 </div>
             </div>
 
-            <div class="col-12 mt-4 mb-4">
+            <div class="col-12 mt-4 mb-2">
                 <button
                     id="submitBtntoUpdate"
                     class="btn w-100 shadow"
@@ -49,16 +50,18 @@
 
 </div>
 
-<div class="col">
-    <div class="card shadow border border-0 mb-3 mt-5 mx-2" style="height: auto; width:100%; overflow-y: auto;">
+<div class="row">
+    {{! <div class="col"> }}
+    <h5 class="mt-3">Update Password<span>&#10151;</span></h5>
+    <div class="card shadow border border-0 mb-3 mt-2">
         <div class="card-body">
             <div class="card-body">
 
-                <div class="pt-4 pb-2">
+                {{! <div class="pt-4 pb-2">
                     <h5 class="card-title text-center pb-0 fs-4">Your Password</h5>
                     <p class="text-center small" style="color:#4fa284">You can reset your password below</p>
                     <div id="messageDivPassword" class="alert"></div>
-                </div>
+                </div> }}
 
                 <div class="col mt-4">
                     <label for="oldPasswordInput" class="form-label">Old Password</label>
@@ -96,7 +99,7 @@
                     <div class="invalid-feedback"></div>
                 </div>
 
-                <div class="col mt-4 mb-4">
+                <div class="col mt-4 mb-2">
                     <button
                         id="submitBtnPasswordUpdate"
                         class="btn w-100 shadow"
@@ -106,5 +109,5 @@
             </div>
         </div>
     </div>
-
 </div>
+{{! </div> }}
