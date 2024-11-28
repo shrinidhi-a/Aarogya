@@ -14,15 +14,17 @@
             <br>
             <div class="row align-items-center">
                 <input 
+                id="userSerchInput"
                   type="text" 
                   class="form-control col" 
-                  placeholder="Enter Email ID here to search for users." 
+                  placeholder="Enter Email Address here to search for users." 
                   aria-label="Recipient's username"
                 >
                 <div
                   title="Search Users" 
                   style="cursor: pointer;" 
                   class="col d-flex align-items-center"
+                  id="userSearchBtn"
                 >
                   <svg 
                     xmlns="http://www.w3.org/2000/svg" 
@@ -53,8 +55,8 @@
             <div class="modal-body">
 
                 <div class="pt-4 pb-2">
-                    <h5 class="card-title text-center pb-0 fs-4">Add a New Doctor</h5> 
-                    <p class="text-center small">Please fill in the details below to register a new doctor and enhance our Aarogya appointment system.</p>
+                    <h5 class="card-title text-center pb-0 fs-4">Add a New User</h5> 
+                    <p class="text-center small">Please fill in the details below to register a new User.</p>
                     <div id="messageDiv" class="alert"></div>
                 </div>
 

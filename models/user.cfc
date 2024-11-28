@@ -7,8 +7,8 @@ component {
     {
         try{
             local.emailCountResult = queryExecute(
-                "SELECT COUNT(*) AS emailCount FROM UserDetails WHERE Email = :email;",
-                {email: arguments.emailID}
+                "SELECT COUNT(*) AS emailCount FROM UserDetails WHERE Email = :email AND Availability =:Availability;",
+                {email: arguments.emailID, Availability: application.USER_AVAILABLE}
             );
             if(local.emailCountResult.recordCount > 0 && local.emailCountResult.emailCount[1] > 0) {
                 return true;
@@ -31,8 +31,8 @@ component {
     {
         try{
             local.emailCountResult = queryExecute(
-                "SELECT COUNT(*) AS emailCount FROM UserDetails WHERE Email = :email and Email != :checkEmail;",
-                {email: arguments.emailID, checkEmail: arguments.checkEmail}
+                "SELECT COUNT(*) AS emailCount FROM UserDetails WHERE Email = :email AND Email != :checkEmail AND Availability =:Availability;;",
+                {email: arguments.emailID, checkEmail: arguments.checkEmail, Availability: application.USER_AVAILABLE}
             );
             if(local.emailCountResult.recordCount > 0 && local.emailCountResult.emailCount[1] > 0) {
                 return true;
@@ -118,7 +118,8 @@ component {
                     Phone,
                     InsuranceProvider,
                     InsuranceCoverageDuration,
-                    Pass
+                    Pass,
+                    Availability
                 )
                 VALUES(
                     :UserRole,
@@ -128,7 +129,8 @@ component {
                     :phone,
                     :insuranceProvider,
                     :insuranceCoverage,
-                    :pass
+                    :pass,
+                    :Availability
                 )",
                 {
                     UserRole:arguments.role,
@@ -138,7 +140,8 @@ component {
                     phone:arguments.phoneNumber,
                     insuranceProvider:arguments.insuranceProvider,
                     insuranceCoverage:arguments.insuranceCoverage,
-                    pass:arguments.hashedPassword
+                    pass:arguments.hashedPassword,
+                    Availability:application.USER_AVAILABLE
                 }
             );
            return true;
@@ -162,19 +165,22 @@ component {
                     UserRole,
                     FullName,
                     Email,
-                    Pass
+                    Pass,
+                    Availability
                 )
                 VALUES(
                     :UserRole,
                     :fullName,
                     :email,
-                    :pass
+                    :pass,
+                    :Availability
                 )",
                 {
                     UserRole:arguments.role,
                     fullName:arguments.name,
                     email:arguments.email,
-                    pass:arguments.hashedPassword
+                    pass:arguments.hashedPassword,
+                    Availability: application.USER_AVAILABLE
                 }
             );
            return true;
@@ -220,8 +226,8 @@ component {
             local.userDetailsResult = queryExecute(
                 "SELECT UserID, FullName, DOB, Email, Phone, InsuranceProvider, InsuranceCoverageDuration, UserRole 
                 FROM UserDetails
-                WHERE Email = :email",
-                {email: arguments.email}
+                WHERE Email = :email AND Availability =:Availability;",
+                {email: arguments.email, Availability: application.USER_AVAILABLE}
             );
     
             if (local.userDetailsResult.recordCount > 0) {
@@ -397,13 +403,13 @@ component {
             // Initialize SQL query and parameters
             local.sql = "SELECT UserID, FullName, DOB, Email, Phone, InsuranceProvider, UserRole, InsuranceCoverageDuration 
                         FROM UserDetails 
-                        WHERE Email != :sessionEmail";
-            local.params = { "sessionEmail": session.userEmail };
+                        WHERE Email != :sessionEmail AND Availability =:Availability";
+            local.params = { sessionEmail: session.userEmail, Availability: application.USER_AVAILABLE};
 
             // Conditionally add Email filter if an email argument is provided
             if (len(trim(arguments.email))) {
                 local.sql &= " AND Email LIKE :email";
-                local.params["email"] = "%" & trim(arguments.email) & "%"; // Adding wildcards for partial matches
+                local.params.email = "%" & trim(arguments.email) & "%"; // Adding wildcards for partial matches
             }
 
             // Execute query
@@ -491,6 +497,29 @@ component {
             return true;
         } catch (any e) {
             writeLog(file="Aarogyalogs", text="Error updating token: " & e.message & "; Details: " & e.detail);
+            return false;
+        }
+    }
+
+    // NOTE: Updated with new Database.
+    public boolean function removeUserInfo(
+        string UserKey
+    ) 
+    {
+        try {
+            queryExecute(
+                "UPDATE UserDetails
+                SET Availability = :status
+                WHERE UserID = :UserID",
+                {
+                    status: application.USER_UNAVAILABLE,
+                    UserID: arguments.UserKey
+                }
+            );
+
+            return true;
+        } catch (any e) {
+            writeLog(file="Aarogyalogs", text="Error deleting User info: " & e.message & "; Details: " & e.detail);
             return false;
         }
     }

@@ -22,6 +22,8 @@ component {
             "APPOINTMENT_STATUS_NOSHOW" :"NoShow",
             "DOCTOR_WORKSTATUS_AVAILABLE" : "available",
             "DOCTOR_WORKSTATUS_UNAVAILABLE" : "unavailable",
+            "USER_UNAVAILABLE" : "unavailable",
+            "USER_AVAILABLE" : "available",
             "CATEGORY_STATUS_AVAILABLE" : "available",
             "CATEGORY_STATUS_UNAVAILABLE" : "unavailable"
         });

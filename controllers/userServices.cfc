@@ -556,6 +556,49 @@ component output="true"{
         return local.response;
     }
 
+    // NOTE: Updated with Aarogya2.0
+    remote struct function removeUserInfo(
+        string UserKey
+    ) 
+    returnformat="JSON" 
+    {
+
+        local.response = {
+            message: '',
+            success: false,
+            sessionAvailable: true
+        };
+
+        try {
+            local.remove = new model.user();
+
+            if (!session.isLoggedIn || !structKeyExists(session, "role") || session.role != "admin") {
+                local.response.message = "Unauthenticated access"; 
+                return local.response;
+            }
+
+            local.sessionVal = new model.session();
+            if(!local.sessionVal.getSessionValidation()){
+                local.response.sessionAvailable = false; 
+                return local.response;
+            }
+
+            if (local.remove.removeUserInfo(
+                arguments.UserKey
+                )) {
+                local.response.success = true;
+                local.response.message = "User Details removed successfully";
+            } else {
+                local.response.message = "Failded to remove User details";
+            }
+
+        } catch (any e) {
+            local.response.message = "Error: " & e.message;
+        }
+
+        return local.response;
+    }
+
     function formatDate(value) {
         if (isDate(value)) {
             return dateFormat(value, "yyyy-MM-dd");

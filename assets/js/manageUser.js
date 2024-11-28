@@ -131,7 +131,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "POST",
-            url: "./controllers/doctorsServices.cfc?method=removeDoctorInfo",
+            url: "./controllers/userServices.cfc?method=removeUserInfo",
             data: formData,
             dataType: "json",
             success: function (response) {
@@ -141,7 +141,7 @@ $(document).ready(function () {
                     window.location.href = "./index.cfm?action=restart";
                 }
                 if (response.SUCCESS) {
-                    window.location.href = "./index.cfm?action=manageDoctors";
+                    window.location.href = "./index.cfm?action=manageUser";
                 } else {
                     alert(response.MESSAGE);
                 }
@@ -151,6 +151,13 @@ $(document).ready(function () {
             },
         });
     }
+
+    $(document).on("click", "#userSearchBtn", function (event) {
+        event.preventDefault();
+        const searchstring = $(`#userSerchInput`).val()?.trim() || "";
+        viewUsers(searchstring);
+        console.log(searchstring);
+    });
 
     function validateFormPatient(key) {
         const validators = [

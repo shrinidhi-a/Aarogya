@@ -8,8 +8,8 @@ component {
             local.adminDetailsResult = queryExecute(
                 "SELECT FullName, UserID
                 FROM UserDetails
-                WHERE Email = :email",
-                {email: arguments.email}
+                WHERE Email = :email AND Availability =:Availability",
+                {email: arguments.email, Availability: application.USER_AVAILABLE}
             );
     
             if (local.adminDetailsResult.recordCount > 0) {

@@ -29,9 +29,13 @@ $(document).ready(function () {
                     .show();
 
                 if (isSuccess && userRole == "admin") {
-                    window.location.href = "./index.cfm?action=profile";
+                    setTimeout(() => {
+                        window.location.href = "./index.cfm?action=profile";
+                    }, 3000);
                 } else {
-                    window.location.href = "./index.cfm?action=landing";
+                    setTimeout(() => {
+                        window.location.href = "./index.cfm?action=landing";
+                    }, 3000);
                 }
             },
             error: function (xhr, status, error) {
