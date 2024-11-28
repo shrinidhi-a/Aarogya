@@ -22,7 +22,30 @@ component {
             return false;
         }
     }
-
+    
+    // NOTE: Updated with new Database.
+    public boolean function checkEmailExistsUnique(
+        string emailID,
+        string checkEmail = session.userEmail
+    )
+    {
+        try{
+            local.emailCountResult = queryExecute(
+                "SELECT COUNT(*) AS emailCount FROM UserDetails WHERE Email = :email and Email != :checkEmail;",
+                {email: arguments.emailID, checkEmail: arguments.checkEmail}
+            );
+            if(local.emailCountResult.recordCount > 0 && local.emailCountResult.emailCount[1] > 0) {
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        catch (any e) {
+            writeLog(file="Aarogyalogs", text="Error checking email: " & e.message & "; Details: " & e.detail);
+            return false;
+        }
+    }
     
     // NOTE: Updated with new Database.
     public boolean function updateSessionDetails(
@@ -363,5 +386,112 @@ component {
             return false;
         }
     }
+
+    public struct function getAllUsers(
+        string email
+    ) {
+        // Initialize local variables
+        local.data = structNew();
+
+        try {
+            // Initialize SQL query and parameters
+            local.sql = "SELECT UserID, FullName, DOB, Email, Phone, InsuranceProvider, UserRole, InsuranceCoverageDuration 
+                        FROM UserDetails 
+                        WHERE Email != :sessionEmail";
+            local.params = { "sessionEmail": session.userEmail };
+
+            // Conditionally add Email filter if an email argument is provided
+            if (len(trim(arguments.email))) {
+                local.sql &= " AND Email LIKE :email";
+                local.params["email"] = "%" & trim(arguments.email) & "%"; // Adding wildcards for partial matches
+            }
+
+            // Execute query
+            local.userInfo = queryExecute(local.sql, local.params);
+
+            // Populate data structure if records are found
+            if (local.userInfo.recordCount > 0) {
+                for (local.row in local.userInfo) {
+
+                    local.formattedDateDOB = dateFormat(local.row.DOB, "yyyy-mm-dd");
+                    local.formattedDateInsure = dateFormat(local.row.InsuranceCoverageDuration, "yyyy-mm-dd");
+
+                    local.data[local.row.UserID] = {
+                        FullName: local.row.FullName,
+                        DOB: local.formattedDateDOB,
+                        Email: local.row.Email,
+                        Phone: local.row.Phone,
+                        InsuranceProvider: local.row.InsuranceProvider,
+                        UserRole: local.row.UserRole,
+                        InsuranceCoverageDuration: local.formattedDateInsure
+                    };
+                }
+            }
+
+            return local.data;
+        } catch (any e) {
+            // Log the error and return an empty structure
+            writeLog(file="Aarogyalogs", text="Error fetching users: " & e.message);
+            return structNew();
+        }
+    }
+
+    // NOTE: Updated with new Database.
+    public boolean function updateAnyUserInfo(
+        string id,
+        string name,
+        string dob,
+        string email,
+        string role,
+        string phoneNumber,
+        string insuranceProvider,
+        string insuranceCoverage
+    ) 
+    {
+        try {
+            if(arguments.role == "patient"){
+
+                local.formattedDate = dateFormat(arguments.dob, "yyyy-mm-dd")
+                local.formattedDateInsu = dateFormat(arguments.insuranceCoverage, "yyyy-mm-dd")
+
+                queryExecute(
+                    "UPDATE UserDetails
+                    SET FullName = :FullName,
+                        DOB = :DOB,
+                        Email = :Email,
+                        Phone = :Phone,
+                        InsuranceProvider = :InsuranceProvider,
+                        InsuranceCoverageDuration = :InsuranceCoverageDuration
+                    WHERE UserID = :UserID",
+                    {
+                        FullName: arguments.name,
+                        DOB: local.formattedDate,
+                        Email: arguments.email,
+                        Phone: arguments.phoneNumber,
+                        InsuranceProvider: arguments.InsuranceProvider,
+                        InsuranceCoverageDuration: local.formattedDateInsu,
+                        UserID: arguments.id
+                    }
+                );  
+            } else {
+                queryExecute(
+                    "UPDATE UserDetails
+                    SET FullName = :FullName,
+                        Email = :Email
+                    WHERE UserID = :UserID",
+                    {
+                        FullName: arguments.name,
+                        Email: arguments.email,
+                        UserID: arguments.id
+                    }
+                ); 
+            }
+            
     
+            return true;
+        } catch (any e) {
+            writeLog(file="Aarogyalogs", text="Error updating token: " & e.message & "; Details: " & e.detail);
+            return false;
+        }
+    }
 }

@@ -1,0 +1,231 @@
+<div class="container row">
+    {{#each this}}
+
+        <div class="card shadow border border-0 px-0 mt-5">
+            <div class="row">
+                <div class="col">
+
+                    <div class="card-body">
+                        {{#if (eq USERROLE "patient")}}
+                            <h5 class="card-title" style="color: #4fa284;">{{FULLNAME}}</h5>
+                            <div class="row">
+                                <div class="col">
+                                    <h6 style="color: #4fa284;">User Information:</h6>
+                                    <p class="card-text">
+                                        Date Of Birth:
+                                        {{DOB}}<br />
+                                        User Role:
+                                        {{USERROLE}}<br />
+                                        Insurance Provider:
+                                        {{INSURANCEPROVIDER}}<br />
+                                        Insurance Coverage:
+                                        {{INSURANCECOVERAGEDURATION}}<br />
+                                        Email:
+                                        <a href="mailto:{{EMAIL}}">{{EMAIL}}</a><br />
+                                        Phone:
+                                        <a href="tel:{{PHONE}}">{{PHONE}}</a><br />
+                                    </p>
+                                </div>
+                            </div>
+                        {{else if (eq USERROLE "admin")}}
+                            <h5 class="card-title" style="color: #4fa284;">{{FULLNAME}}</h5>
+                            <div class="row">
+                                <div class="col">
+                                    <h6 style="color: #4fa284;">User Information:</h6>
+                                    <p class="card-text">
+                                        User Role:
+                                        {{USERROLE}}<br />
+                                        Email:
+                                        <a href="mailto:{{EMAIL}}">{{EMAIL}}</a><br />
+                                    </p>
+                                </div>
+                            </div>
+                        {{/if}}
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button
+                                class="btn shadow btn-sm"
+                                type="button"
+                                id=""
+                                style="background-color:#fdfdfd; color:#4fa284"
+                                data-bs-toggle="modal"
+                                data-bs-target="#exampleModalEditUser_{{@key}}"
+                            >Update Information</button>
+                            <button
+                                class="btn shadow btn-sm"
+                                type="button"
+                                id="confirmedRemoveDoc_{{@key}}"
+                                style="background-color:#fdfdfd; color:#4fa284"
+                                data-bs-toggle="modal"
+                                data-bs-target="#exampleModalRemoveUser_{{@key}}"
+                            >Remove User</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div
+            class="modal fade"
+            id="exampleModalRemoveUser_{{@key}}"
+            tabindex="-1"
+            data-bs-backdrop="static"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+        >
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header border-0">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <p>Do you want to remove user {{FULLNAME}} from Arogya?</p>
+                        <div class="modal-footer border-0">
+                            <button
+                                id="confirmRemoveUser_{{@key}}"
+                                class="btn shadow"
+                                style="background-color:#fdfdfd; color:#4fa284"
+                            >
+                                Remove User
+                            </button>
+                            <button
+                                type="button"
+                                class="btn shadow"
+                                data-bs-dismiss="modal"
+                                style="background-color:#fdfdfd; color:#4fa284"
+                            >Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div
+            class="modal fade"
+            id="exampleModalEditUser_{{@key}}"
+            tabindex="-1"
+            data-bs-backdrop="static"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+        >
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header border-0">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body">
+
+                        <div class="pt-4 pb-2">
+                            <h5 class="card-title text-center pb-0 fs-4">Update User information</h5>
+                            <p class="text-center small">Please fill the details below to update user information.</p>
+                            <div id="messageDivUpdateUserMadal_{{@key}}" class="alert"></div>
+                        </div>
+
+                        <form class="row g-3" novalidate>
+
+                            <div class="col-12">
+                                <label for="yourName_{{@key}}" class="form-label">Full Name</label>
+                                <input
+                                    type="text"
+                                    name="name"
+                                    class="form-control"
+                                    id="yourName_{{@key}}"
+                                    value="{{FULLNAME}}"
+                                    required
+                                />
+                                <div class="invalid-feedback"></div>
+                            </div>
+                            <div class="col-12">
+                                <label for="yourEmail_{{@key}}" class="form-label">Email Address</label>
+                                <div class="input-group has-validation">
+                                    <span class="input-group-text" id="inputGroupPrepend">@</span>
+                                    <input
+                                        type="email"
+                                        value="{{EMAIL}}"
+                                        name="email"
+                                        class="form-control"
+                                        id="yourEmail_{{@key}}"
+                                        required
+                                    />
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+                            {{#if (eq USERROLE "patient")}}
+                                <div class="col-12" id="dataOfBirthContainer">
+                                    <label for="yourDob_{{@key}}" class="form-label">Date of Birth</label>
+                                    <input
+                                        type="date"
+                                        value="{{DOB}}"
+                                        name="dateofbirth"
+                                        class="form-control"
+                                        id="yourDob_{{@key}}"
+                                        required
+                                    />
+                                    <div class="invalid-feedback"></div>
+                                </div>
+
+                                <div class="col-12" id="phoneContainer">
+                                    <label for="yourPhoneNumber_{{@key}}" class="form-label">Phone Number</label>
+                                    <div class="input-group has-validation">
+                                        <input
+                                            type="tel"
+                                            name="phoneNumber"
+                                            class="form-control"
+                                            id="yourPhoneNumber_{{@key}}"
+                                            value="{{PHONE}}"
+                                            required
+                                        />
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                </div>
+                                <div class="col-12" id="insuranceProviderContainer">
+                                    <label for="yourInPr_{{@key}}" class="form-label">Insurance provider</label>
+                                    <input
+                                        type="text"
+                                        name="insuranceProvider"
+                                        class="form-control"
+                                        id="yourInPr_{{@key}}"
+                                        value="{{INSURANCEPROVIDER}}"
+                                        required
+                                    />
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                                <div class="col-12" id="insuranceCoverageContainer">
+                                    <label for="yourInVal_{{@key}}" class="form-label">Insurance coverage expiration
+                                        date</label>
+                                    <input
+                                        type="date"
+                                        name="insuranceExpiration"
+                                        class="form-control"
+                                        id="yourInVal_{{@key}}"
+                                        value="{{INSURANCECOVERAGEDURATION}}"
+                                        required
+                                    />
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            {{/if}}
+                        </form>
+                        <div class="modal-footer border-0">
+                            <button
+                                id="submitBtnUpdateUser_{{@key}}"
+                                class="btn shadow"
+                                style="background-color:#fdfdfd; color:#4fa284"
+                            >
+                                Update User information
+                            </button>
+                            <button
+                                type="button"
+                                class="btn shadow"
+                                data-bs-dismiss="modal"
+                                style="background-color:#fdfdfd; color:#4fa284"
+                            >Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    {{/each}}
+</div>

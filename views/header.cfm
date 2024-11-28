@@ -137,6 +137,12 @@
                                         </a>
                                     </li>
                                     <li>
+                                        <a href=./index.cfm?action=manageUser class="dropdown-item d-flex align-items-center" id="" style="color: #4fa284; cursor: pointer;">
+                                            <i class="bi bi-box-arrow-right"></i>
+                                            <span>Manage Users</span>
+                                        </a>
+                                    </li>
+                                    <li>
                                         <a href=./index.cfm?action=reports class="dropdown-item d-flex align-items-center" id="" style="color: #4fa284; cursor: pointer;">
                                             <i class="bi bi-box-arrow-right"></i>
                                             <span>Reports</span>

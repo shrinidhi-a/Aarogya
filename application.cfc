@@ -56,7 +56,8 @@ component {
             "error": "errorPage",
             "restart" : "restart",
             "sheduler-2353DD262":"sheduler",
-            "landing":"landing"
+            "landing":"landing",
+            "manageUser":"manageUser"
         };
 
         
@@ -77,7 +78,7 @@ component {
                 }
             }
             
-            if (structKeyExists(session, "isLoggedIn") && !session.isLoggedIn && listFindNoCase('landing,profile,newAppointment,newDoctor,newCategory,myprofile,manageDoctors,manageCategory,reports', action)) {
+            if (structKeyExists(session, "isLoggedIn") && !session.isLoggedIn && listFindNoCase('landing,profile,newAppointment,newDoctor,newCategory,myprofile,manageDoctors,manageCategory,manageUser,reports', action)) {
                 request.path = allowedActions["login"];
             } else if(structKeyExists(session, "isLoggedIn") && session.isLoggedIn && listFindNoCase('login,register,adminLogin,home', action)) {
                 // request.path = allowedActions["profile"];

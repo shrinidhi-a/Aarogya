@@ -314,6 +314,12 @@ component output="true"{
                 return local.response;
             }
 
+            if(local.updateBasic.checkEmailExistsUnique(arguments.email)){
+                local.response.message = "Email Already Exists"; 
+                return local.response;
+            }
+
+
             if (local.updateBasic.updateUserBasicInfo(
                 arguments.name,
                 arguments.dob,
@@ -447,6 +453,106 @@ component output="true"{
         catch (any e) {
             local.response.message=e.message;  
         }
+        return local.response;
+    }
+
+    remote struct function getAllUsers(
+        string email
+    ) 
+    returnformat="JSON"
+    {
+        local.response = {
+            message: '',
+            data: structNew(),
+            sessionAvailable: true,
+            success: false
+        };
+
+        try {
+            local.userDetail = new model.user();
+
+            if (!session.isLoggedIn || !structKeyExists(session, "role") || session.role != "admin") {
+                local.response.message = "Unauthenticated access"; 
+                return local.response;
+            }
+
+            local.sessionVal = new model.session();
+            if(!local.sessionVal.getSessionValidation()){
+                local.response.sessionAvailable = false; 
+                return local.response;
+            }
+
+            local.user = new model.user();    
+            
+            local.response.data = local.user.getAllUsers(arguments.email);
+            local.response.message = "Successfully retrived User information"; 
+            local.response.success = true; 
+
+        } catch (any e) {
+            local.response.message = "Error: " & e.message;
+        }
+        return local.response;
+    }
+
+    remote struct function updateAnyUserInfo(
+        string id,
+        string name,
+        string email,
+        string originalEmail,
+        string role,
+        string dob,
+        string phoneNumber,
+        string insuranceProvider,
+        string insuranceCoverage
+    ) 
+    returnformat="JSON" 
+    {
+        local.response = {
+            message: '',
+            success: false,
+            sessionAvailable: true
+        };
+
+        try {
+            local.updateBasic = new model.user();
+
+            if (!session.isLoggedIn || !structKeyExists(session, "role") || session.role != "admin") {
+                local.response.message = "Unauthenticated access"; 
+                return local.response;
+            }
+
+            local.sessionVal = new model.session();
+            local.sessionValue = local.sessionVal.getSessionValidation();
+            if(local.sessionValue == false){
+                local.response.sessionAvailable = false; 
+                return local.response;
+            }
+
+            if(local.updateBasic.checkEmailExistsUnique(arguments.email, arguments.originalEmail)){
+                local.response.message = "Email Already Exists"; 
+                return local.response;
+            }
+
+            if (local.updateBasic.updateAnyUserInfo(
+                arguments.id,
+                arguments.name,
+                arguments.dob,
+                arguments.email,
+                arguments.role,
+                arguments.phoneNumber,
+                arguments.insuranceProvider,
+                arguments.insuranceCoverage
+                )) {
+                local.response.success = true;
+                local.response.message = "User Details updated successfully";
+            } else {
+                local.response.message = "Failded to update user details";
+            }
+
+        } catch (any e) {
+            local.response.message = "Error: " & e.message;
+        }
+
         return local.response;
     }
 

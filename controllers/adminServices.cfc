@@ -52,6 +52,7 @@ component output="true"{
 
         try {
             local.updateBasic = new model.admin();
+            local.updateUser = new model.user();
 
             if (!session.isLoggedIn || !structKeyExists(session, "role") || session.role != "admin") {
                 local.response.message = "Unauthenticated access"; 
@@ -61,6 +62,11 @@ component output="true"{
             local.sessionVal = new model.session();
             if(!local.sessionVal.getSessionValidation()){
                 local.response.sessionAvailable = false; 
+                return local.response;
+            }
+
+            if(local.updateUser.checkEmailExistsUnique(arguments.email)){
+                local.response.message = "Email Already Exists"; 
                 return local.response;
             }
 

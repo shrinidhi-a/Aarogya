@@ -36,5 +36,6 @@
     <script src="./assets/js/manageDoctors.js"></script>
     <script src="./assets/js/manageCategory.js"></script>
     <script src="./assets/js/reports.js"></script>
+    <script src="./assets/js/manageUser.js"></script>
   </cfif>
 </cfif>

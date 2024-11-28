@@ -67,10 +67,10 @@ $(document).ready(function () {
                 //     .addClass(isSuccess ? "alert-success" : "alert-danger")
                 //     .html(message);
 
-                if (isSuccess) {
-                    alert(response.MESSAGE);
-                    window.location.href = "./index.cfm?action=profile";
-                }
+                // if (isSuccess) {
+                alert(response.MESSAGE);
+                window.location.href = "./index.cfm?action=myprofile";
+                // }
             },
             error: function (xhr, status, error) {
                 console.warn("AJAX error: " + error);
@@ -118,10 +118,10 @@ $(document).ready(function () {
                 //     }, 3000);
                 // }
 
-                if (isSuccess) {
-                    alert(response.MESSAGE);
-                    window.location.href = "./index.cfm?action=profile";
-                }
+                // if (isSuccess) {
+                alert(response.MESSAGE);
+                window.location.href = "./index.cfm?action=myprofile";
+                // }
             },
             error: function (xhr, status, error) {
                 console.warn("AJAX error: " + error);
@@ -154,7 +154,7 @@ $(document).ready(function () {
                 }
                 const isSuccess = response.SUCCESS;
                 // const message = isSuccess
-                //     ? "Password Updated successfully"
+                // ? "Password Updated successfully"
                 //     : "Password Update failed: " + response.MESSAGE;
 
                 // $messageDiv
@@ -168,10 +168,10 @@ $(document).ready(function () {
                 //     }, 3000);
                 // }
 
-                if (isSuccess) {
-                    alert(response.MESSAGE);
-                    window.location.href = "./index.cfm?action=profile";
-                }
+                // if (isSuccess) {
+                alert(response.MESSAGE);
+                window.location.href = "./index.cfm?action=myprofile";
+                // }
             },
             error: function (xhr, status, error) {
                 console.warn("AJAX error: " + error);
