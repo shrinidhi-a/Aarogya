@@ -63,49 +63,70 @@
                 <form class="row g-3" novalidate>
 
                     <div class="col-12">
+                        <label for="yourRoleManage" class="form-label">Select Your Account Type</label>
+                        <div class="input-group has-validation">
+                            <select name="role" class="form-control" id="yourRoleManage" required>
+                                <option value="patient" selected>Patient</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                            <div class="invalid-feedback"></div>
+                        </div>
+                    </div>
+                      <div class="col-12">
                         <label for="yourName" class="form-label">Full Name</label>
                         <input type="text" name="name" class="form-control" id="yourName" required>
                         <div class="invalid-feedback"></div>
-                    </div>
-
-                    <div class="col-12">
+                      </div>
+                      <div class="col-12" id="dataOfBirthContainerManage">
+                          <label for="yourDob" class="form-label">Date of Birth</label>
+                          <input type="date" name="dateofbirth" class="form-control" id="yourDob" required>
+                          <div class="invalid-feedback"></div>
+                        </div>
+                      <div class="col-12">
                         <label for="yourEmail" class="form-label">Email Address</label>
                         <div class="input-group has-validation">
-                            <span class="input-group-text" id="inputGroupPrepend">@</span>
-                            <input type="email" name="email" class="form-control" id="yourEmail" required>
-                            <div class="invalid-feedback"></div>
+                          <span class="input-group-text" id="inputGroupPrepend">@</span>
+                          <input type="email" name="email" class="form-control" id="yourEmail" required>
+                          <div class="invalid-feedback"></div>
                         </div>
-                    </div>
-
-                    <div class="col-12">
+                      </div>
+                      <div class="col-12" id="phoneContainerManage">
                         <label for="yourPhoneNumber" class="form-label">Phone Number</label>
                         <div class="input-group has-validation">
-                            <input type="tel" name="phoneNumber" class="form-control" id="yourPhoneNumber" required>
-                            <div class="invalid-feedback"></div>
+                          <input type="tel" name="phoneNumber" class="form-control" id="yourPhoneNumber" required>
+                          <div class="invalid-feedback"></div>
                         </div>
-                    </div>
-
-                    <div class="col-12">
-                        <label for="yourQualification" class="form-label">Qualification</label>
-                        <input type="text" name="Qualification" class="form-control" id="yourQualification" required>
+                      </div>
+                      <div class="col-12" id="insuranceProviderContainerManage">
+                        <label for="yourInPr" class="form-label">Insurance provider</label>
+                        <input type="text" name="insuranceProvider" class="form-control" id="yourInPr" required>
                         <div class="invalid-feedback"></div>
-                    </div>
-
-                    <div class="col-12">
-                        <label for="fileUploadDoctor" class="form-label">Choose Doctor image to upload</label>
-                        <input type="file" class="form-control" id="fileUploadDoctor" name="fileUpload" required/>
+                      </div>
+                      <div class="col-12" id="insuranceCoverageContainerManage">
+                          <label for="yourInVal" class="form-label">Insurance coverage expiration date</label>
+                          <input type="date" name="insuranceExpiration" class="form-control" id="yourInVal" required>
+                          <div class="invalid-feedback"></div>
+                        </div>
+                      <div class="col-12">
+                        <label for="yourPassword" class="form-label">Password</label>
+                        <input type="password" name="password" class="form-control" id="yourPassword" required>
                         <div class="invalid-feedback"></div>
-                    </div>
+                      </div>
+                      <div class="col-12">
+                        <label for="confirmPassword" class="form-label">Confirm Password</label>
+                        <input type="password" name="confirmPassword" class="form-control" id="confirmPassword" required>
+                        <div class="invalid-feedback"></div>
+                      </div>
 
-                    <div class="col-12" id="categoryDropDownNewDoc"></div>
-                    </div>
+                    
+                    
                     <div class="modal-footer border-0">
                         <button
-                                id="submitBtnNewDoctor"
+                                id="submitBtnNewUser"
                                 class="btn shadow"
                                 style="background-color:#fdfdfd; color:#4fa284"
                             >
-                            Add New Doctor
+                            Add New User
                         </button>
                         <button type="button" class="btn shadow" data-bs-dismiss="modal" style="background-color:#fdfdfd; color:#4fa284">Close</button>
                     </div>

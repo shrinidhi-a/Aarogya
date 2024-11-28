@@ -159,23 +159,111 @@ $(document).ready(function () {
         console.log(searchstring);
     });
 
-    function validateFormPatient(key) {
-        const validators = [
-            () => validateFullName(key),
-            () => validateDOB(key),
-            () => validateEmail(key),
-            () => validatePhoneNumber(key),
-            () => validateInsuranceProvider(key),
-            () => validateInsuranceCoverage(key),
-        ];
+    $(document).on("click", "#submitBtnNewUser", function (event) {
+        event.preventDefault();
+
+        const isAdmin = $("#yourRoleManage").val().trim() === "admin";
+        if ((isAdmin && !validateFormAdmin()) || (!isAdmin && !validateFormPatient())) return;
+
+        let formData = {
+            role: $("#yourRoleManage").val().trim(),
+            name: $("#yourName").val().trim(),
+            email: $("#yourEmail").val().trim(),
+            password: $("#yourPassword").val().trim(),
+        };
+
+        if (!isAdmin) {
+            formData.dob = $("#yourDob").val().trim();
+            formData.phoneNumber = $("#yourPhoneNumber").val().trim();
+            formData.insuranceProvider = $("#yourInPr").val().trim();
+            formData.insuranceCoverage = $("#yourInVal").val().trim();
+        }
+
+        let $messageDiv = $("#messageDiv");
+
+        $.ajax({
+            type: "POST",
+            url: "./controllers/userServices.cfc?method=userRegistration",
+            data: formData,
+            dataType: "json",
+            success: function (response) {
+                const isSuccess = response.SUCCESS;
+                const message = isSuccess ? "User Created successfully" : "User Creation failed: " + response.MESSAGE;
+
+                $messageDiv
+                    .removeClass(isSuccess ? "alert-danger" : "alert-success")
+                    .addClass(isSuccess ? "alert-success" : "alert-danger")
+                    .html(message);
+
+                if (isSuccess) {
+                    setTimeout(() => {
+                        window.location.href = "./index.cfm?action=manageUser";
+                    }, 3000);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.warn("AJAX error: " + error);
+            },
+        });
+    });
+
+    $(document).on("change", "#yourRoleManage", function (event) {
+        var selectedCategory = $(this).val();
+        if (selectedCategory == "admin") {
+            $(`#dataOfBirthContainerManage`).addClass("d-none");
+            $(`#phoneContainerManage`).addClass("d-none");
+            $(`#insuranceProviderContainerManage`).addClass("d-none");
+            $(`#insuranceCoverageContainerManage`).addClass("d-none");
+        } else {
+            $(`#dataOfBirthContainerManage`).removeClass("d-none");
+            $(`#phoneContainerManage`).removeClass("d-none");
+            $(`#insuranceProviderContainerManage`).removeClass("d-none");
+            $(`#insuranceCoverageContainerManage`).removeClass("d-none");
+        }
+        console.log(selectedCategory);
+    });
+
+    function validateFormPatient(key = "") {
+        let validators = [];
+        if (key == "") {
+            validators = [
+                () => validateFullName(key),
+                () => validateDOB(key),
+                () => validateEmail(key),
+                () => validatePhoneNumber(key),
+                () => validateInsuranceProvider(key),
+                () => validateInsuranceCoverage(key),
+                validatePassword,
+                validatePasswordMatch,
+            ];
+        } else {
+            validators = [
+                () => validateFullName(key),
+                () => validateDOB(key),
+                () => validateEmail(key),
+                () => validatePhoneNumber(key),
+                () => validateInsuranceProvider(key),
+                () => validateInsuranceCoverage(key),
+            ];
+        }
 
         const results = validators.map((validator) => validator());
         console.log(results);
         return results.every((result) => result);
     }
 
-    function validateFormAdmin(key) {
-        const validators = [() => validateFullName(key), () => validateEmail(key)];
+    function validateFormAdmin(key = "") {
+        let validators = [];
+        if (key == "") {
+            validators = [
+                () => validateFullName(key),
+                () => validateEmail(key),
+                validatePassword,
+                validatePasswordMatch,
+            ];
+        } else {
+            validators = [() => validateFullName(key), () => validateEmail(key)];
+        }
 
         const results = validators.map((validator) => validator());
         console.log(results);
@@ -211,15 +299,17 @@ $(document).ready(function () {
     }
 
     function validateFullName(key) {
-        return validateField(`#yourName_${key}`, "Please Enter Full Name");
+        let str = key ? `_${key}` : "";
+        return validateField(`#yourName${str}`, "Please Enter Full Name");
     }
 
     function validateDOB(key) {
-        let dob = $(`#yourDob_${key}`).val().trim();
+        let str = key ? `_${key}` : "";
+        let dob = $(`#yourDob${str}`).val().trim();
         let dobDate = new Date(dob);
 
         if (isNaN(dobDate.getTime())) {
-            showError(`#yourDob_${key}`, "Please enter a valid date");
+            showError(`#yourDob${str}`, "Please enter a valid date");
             return false;
         }
 
@@ -232,39 +322,43 @@ $(document).ready(function () {
         }
 
         if (age < 18) {
-            showError(`#yourDob_${key}`, "You must be at least 18 years old");
+            showError(`#yourDob${str}`, "You must be at least 18 years old");
             return false;
         }
 
         if (age > 130) {
-            showError(`#yourDob_${key}`, "Please provide currect date of birth");
+            showError(`#yourDob${str}`, "Please provide currect date of birth");
             return false;
         }
 
-        showError(`#yourDob_${key}`, "");
+        showError(`#yourDob${str}`, "");
         return true;
     }
 
     function validateEmail(key) {
+        let str = key ? `_${key}` : "";
         const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return validateField(`#yourEmail_${key}`, "Please Enter Email Address", regex);
+        return validateField(`#yourEmail${str}`, "Please Enter Email Address", regex);
     }
 
     function validatePhoneNumber(key) {
+        let str = key ? `_${key}` : "";
         const regex = /^\d{10}$/;
-        return validateField(`#yourPhoneNumber_${key}`, "Enter phone number", regex);
+        return validateField(`#yourPhoneNumber${str}`, "Enter phone number", regex);
     }
 
     function validateInsuranceProvider(key) {
-        return validateField(`#yourInPr_${key}`, "Please Enter Insurance provider");
+        let str = key ? `_${key}` : "";
+        return validateField(`#yourInPr${str}`, "Please Enter Insurance provider");
     }
 
     function validateInsuranceCoverage(key) {
-        let doi = $(`#yourInVal_${key}`).val().trim();
+        let str = key ? `_${key}` : "";
+        let doi = $(`#yourInVal${str}`).val().trim();
         let doiDate = new Date(doi);
 
         if (isNaN(doiDate.getTime())) {
-            showError(`#yourInVal_${key}`, "Please enter a valid date");
+            showError(`#yourInVal${str}`, "Please enter a valid date");
             return false;
         }
 
@@ -277,11 +371,39 @@ $(document).ready(function () {
         }
 
         if (ageOfInsurance > 130) {
-            showError(`#yourInVal_${key}`, "Please provide currect coverage date");
+            showError(`#yourInVal${str}`, "Please provide currect coverage date");
             return false;
         }
 
-        showError(`#yourInVal_${key}`, "");
+        showError(`#yourInVal${str}`, "");
+        return true;
+    }
+
+    function validatePassword() {
+        const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}$/;
+        if (
+            !validateField(
+                "#yourPassword",
+                "password must be at least 8 characters long and include at least one lowercase letter, one uppercase letter, one digit, and one special character",
+                regex
+            )
+        ) {
+            return false;
+        }
+        return true;
+    }
+
+    function validatePasswordMatch() {
+        const password = $("#yourPassword").val().trim();
+        const confirmPassword = $("#confirmPassword").val().trim();
+        if (confirmPassword === "") {
+            showError("#confirmPassword", "Please Confirm password");
+            return false;
+        } else if (password !== confirmPassword) {
+            showError("#confirmPassword", "Passwords do not match");
+            return false;
+        }
+        showError("#confirmPassword", "");
         return true;
     }
 });
