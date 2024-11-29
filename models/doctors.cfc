@@ -7,12 +7,28 @@ component {
 
         try {
             // Initialize SQL query and parameters
-            local.sql = "SELECT DoctorID, FullName, Qualification, Email, Phone, imagePath FROM Doctors WHERE WorkStatus = :workstatus";
+            // local.sql = "SELECT DoctorID, FullName, Qualification, Email, Phone, imagePath FROM Doctors WHERE WorkStatus = :workstatus";
+            local.sql = "
+                SELECT 
+                    d.DoctorID, 
+                    d.FullName, 
+                    d.Qualification, 
+                    d.Email, 
+                    d.Phone, 
+                    d.imagePath,
+                    c.CategoryName,
+                    c.CategoryCode
+                FROM 
+                    Doctors d
+                INNER JOIN 
+                    Categories c ON d.CategoryID = c.CategoryID
+                WHERE 
+                    d.WorkStatus = :workstatus";
             local.params = { workstatus: application.DOCTOR_WORKSTATUS_AVAILABLE };
 
             // Conditionally add CategoryID filter if a category is provided
             if (len(trim(arguments.category))) {
-                local.sql &= " AND CategoryID = :category";
+                local.sql &= " AND d.CategoryID = :category";
                 local.params["category"] = arguments.category;
             }
 
@@ -27,7 +43,8 @@ component {
                         Qualification: local.row.Qualification,
                         Email: local.row.Email,
                         Phone: local.row.Phone,
-                        ImagePath: local.row.imagePath
+                        ImagePath: local.row.imagePath,
+                        Category: local.row.CategoryName
                     };
                 }
             }
@@ -193,6 +210,55 @@ component {
                     Email:arguments.email,
                     Phone:arguments.phone,
                     imagePath:arguments.filePath
+                }
+            );
+            return true;
+        } catch (any e) {
+            writeLog(file="Aarogyalogs", text="Error creating doctors: " & e.message);
+            return false;
+        }
+    }
+
+    // NOTE: Updated with new Database.
+    public boolean function addUnavailability(
+        string doctorId,
+        string unavailabilityDate,
+        string unavailabilityStartTime,
+        string unavailabilityEndTime
+    ) {
+
+        local.timeIn24 = {
+            "1" : "09:00:00",
+            "2" : "10:00:00",
+            "3" : "11:00:00",
+            "4" : "12:00:00",
+            "5" : "14:00:00",
+            "6" : "15:00:00",
+            "7" : "16:00:00",
+            "8" : "17:00:00",
+            "9" : "18:00:00",
+            "10" : "19:00:00"
+        };
+
+        try {
+            queryExecute(
+                "INSERT INTO DoctorUnavailability(
+                    DoctorId,
+                    UnavailableDate,
+                    StartTime,
+                    EndTime
+                )
+                VALUES(
+                    :DoctorId,
+                    :UnavailableDate,
+                    :StartTime,
+                    :EndTime
+                )",
+                {
+                    DoctorId:arguments.doctorId,
+                    UnavailableDate:arguments.unavailabilityDate,
+                    StartTime:local.timeIn24[arguments.unavailabilityStartTime],
+                    EndTime:local.timeIn24[arguments.unavailabilityEndTime]
                 }
             );
             return true;

@@ -49,7 +49,7 @@ $(document).ready(function () {
             dataType: "json",
             success: function (response) {
                 handlebarsDoctorsList(response.DATA);
-                // console.log(response.DATA);
+                console.log(response.DATA);
                 const doctorsData = response.DATA;
 
                 for (const key in doctorsData) {
@@ -99,6 +99,13 @@ $(document).ready(function () {
                             .on("click", `#confirmRemoveDoc_${doctorKey}`, function (event) {
                                 event.preventDefault();
                                 removeDoctorDetails(doctorKey, category);
+                            });
+
+                        $(document)
+                            .off("click", `#confirmSetUnavailabilityDoc_${doctorKey}`)
+                            .on("click", `#confirmSetUnavailabilityDoc_${doctorKey}`, function (event) {
+                                event.preventDefault();
+                                addDoctorUnavaolabilityDetails(doctorKey);
                             });
                     }
                 }
@@ -180,6 +187,49 @@ $(document).ready(function () {
         });
     }
 
+    function addDoctorUnavaolabilityDetails(doctorKey) {
+        let $messageDiv = $(`#messageDivSetUnavailabilityDocMadal_${doctorKey}`);
+        if (!validateFormDoctorUnavailabity(doctorKey)) return;
+
+        let formData = {
+            doctorId: doctorKey,
+            unavailabilityDate: $(`#SetUnavailabilityDocDate_${doctorKey}`).val().trim(),
+            unavailabilityStartTime: $(`#SetUnavailabilityDocStartTime_${doctorKey}`).val().trim(),
+            unavailabilityEndTime: $(`#SetUnavailabilityDocEndTime_${doctorKey}`).val().trim(),
+        };
+
+        console.log(formData);
+
+        $.ajax({
+            type: "POST",
+            url: "./controllers/doctorsServices.cfc?method=addUnavailability",
+            data: formData,
+            dataType: "json",
+            success: function (response) {
+                console.log(response);
+                if (response.SESSIONAVAILABLE == false) {
+                    alert("New login detected! You’ve been logged out for security.");
+                    window.location.href = "./index.cfm?action=restart";
+                }
+                const isSuccess = response.SUCCESS;
+
+                $messageDiv
+                    .removeClass(isSuccess ? "alert-danger" : "alert-success")
+                    .addClass(isSuccess ? "alert-success" : "alert-danger")
+                    .html(response.MESSAGE);
+
+                if (isSuccess) {
+                    setTimeout(() => {
+                        window.location.href = "./index.cfm?action=manageDoctors";
+                    }, 3000);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.warn("AJAX error: " + error);
+            },
+        });
+    }
+
     function validateForm(key) {
         const validators = [
             () => validateFullName(key),
@@ -187,6 +237,14 @@ $(document).ready(function () {
             () => validatePhoneNumber(key),
             () => validateSpecialization(key),
         ];
+
+        const results = validators.map((validator) => validator());
+        console.log(results);
+        return results.every((result) => result);
+    }
+
+    function validateFormDoctorUnavailabity(doctorKey) {
+        const validators = [() => validateUnavailableDate(doctorKey), () => validateUnavailableTime(doctorKey)];
 
         const results = validators.map((validator) => validator());
         console.log(results);
@@ -237,5 +295,48 @@ $(document).ready(function () {
 
     function validateSpecialization(key) {
         return validateField(`#yourQualificationDoctor_${key}`, "Please Enter Specialization");
+    }
+
+    function validateUnavailableDate(doctorKey) {
+        const today = new Date();
+        const tomorrow = new Date(today);
+        let doi = $(`#SetUnavailabilityDocDate_${doctorKey}`).val().trim();
+        let doiDate = new Date(doi);
+
+        if (isNaN(doiDate.getTime())) {
+            showError(`#SetUnavailabilityDocDate_${doctorKey}`, "Please enter a valid date");
+            return false;
+        }
+
+        if (doiDate < tomorrow) {
+            showError(`#SetUnavailabilityDocDate_${doctorKey}`, "Please enter a date after today");
+            return false;
+        }
+
+        showError(`#SetUnavailabilityDocDate_${doctorKey}`, "");
+        return true;
+    }
+
+    function validateUnavailableTime(doctorKey) {
+        let startTime = $(`#SetUnavailabilityDocStartTime_${doctorKey}`).val().trim();
+        let endTime = $(`#SetUnavailabilityDocEndTime_${doctorKey}`).val().trim();
+
+        if (startTime.trim() === "" || endTime.trim() === "") {
+            showError(`#SetUnavailabilityDocStartTime_${doctorKey}`, "Please Select Time");
+            return false;
+        }
+
+        if (startTime.trim() === endTime.trim()) {
+            showError(`#SetUnavailabilityDocStartTime_${doctorKey}`, "Please Select Different Time");
+            return false;
+        }
+
+        if (startTime.trim() > endTime.trim()) {
+            showError(`#SetUnavailabilityDocStartTime_${doctorKey}`, "Start time should be less than End time");
+            return false;
+        }
+
+        showError(`#SetUnavailabilityDocStartTime_${doctorKey}`, "");
+        return true;
     }
 });

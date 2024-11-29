@@ -561,6 +561,31 @@ component {
                             }
                         }
                     }
+
+                    local.availabilityInfo = queryExecute(
+                        "SELECT StartTime, EndTime FROM DoctorUnavailability WHERE UnavailableDate = :UnavailableDate AND DoctorId = :DoctorId",
+                        {
+                            DoctorId: local.row.DoctorID,
+                            UnavailableDate: local.dateToSend
+                        }
+                    );
+
+                    if (local.availabilityInfo.recordCount > 0) {
+                        // writeLog(file="Aarogyalogs", text=local.row.DoctorID);
+                        // local.Category = local.categoryInfo.CategoryName[1]
+                        for (local.unavailability in local.availabilityInfo) {
+                            local.startTimeUnavailability = timeFormat(local.unavailability.StartTime, "hh:mm tt");
+                            local.endTimeUnavailability = timeFormat(local.unavailability.EndTime, "hh:mm tt");
+                            
+                            for (local.appointment in local.tracker.appointments) {
+                                // writeLog(file="Aarogyalogs", text="inside");
+                                if (DateCompare(local.appointment.time, local.startTimeUnavailability) >= 0 && DateCompare(local.appointment.time, local.endTimeUnavailability) <= 0) {
+                                    // writeLog(file="Aarogyalogs", text="");
+                                    local.appointment.isEnabled = true
+                                }
+                            }
+                        }
+                    }
                     
                     local.categoryInfo = queryExecute(
                         "SELECT CategoryName FROM Categories WHERE CategoryID = :CategoryID",

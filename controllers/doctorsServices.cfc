@@ -227,4 +227,58 @@ component output="true"{
 
         return local.response;
     }
+
+    // NOTE: Updated with Aarogya2.0
+    remote struct function addUnavailability(
+        string doctorId,
+        string unavailabilityDate,
+        string unavailabilityStartTime,
+        string unavailabilityEndTime
+    ) 
+        returnformat="JSON"
+    {
+        local.response = {
+            message: '',
+            success: false,
+            sessionAvailable: true
+        };
+
+        try {
+            if (!(session.isLoggedIn && structKeyExists(session, "role") && session.role == "admin")) {
+                local.response.message = "Unauthenticated access"; 
+                return local.response;
+            }
+
+            local.sessionVal = new model.session();
+            if(!local.sessionVal.getSessionValidation()){
+                local.response.sessionAvailable = false; 
+                return local.response;
+            }  
+
+            local.doctors = new model.doctors();
+            if (local.doctors.addUnavailability(
+                arguments.doctorId,
+                arguments.unavailabilityDate,
+                arguments.unavailabilityStartTime,
+                arguments.unavailabilityEndTime
+            )) {
+                local.response.success = true;
+                local.response.message = "Doctor Unavailability added Successfully";
+            } else {
+                local.response.message = "Failed to add Unavailability";
+            }
+        } catch (any e) {
+            local.response.message = "Error: " & e.message;
+        }
+
+        return local.response;
+    }
+
+    function formatDate(value) {
+        if (isDate(value)) {
+            return dateFormat(value, "yyyy-MM-dd");
+        } else {
+            return dateFormat(createDateTime(value), "yyyy-MM-dd");
+        }
+    }
 }
