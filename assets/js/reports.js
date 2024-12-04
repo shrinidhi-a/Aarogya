@@ -2,7 +2,7 @@ $(document).ready(function () {
     //Generating dynamic Appointment cards.
 
     if (window.location.search == "?action=reports") {
-        appointmentDetails("pending");
+        appointmentDetails("");
     }
 
     function handlebarsAppointments(context) {
@@ -15,8 +15,12 @@ $(document).ready(function () {
     }
 
     //Getting appointment details.
-    function appointmentDetails(status) {
-        const formData = { status };
+    function appointmentDetails(status = "", mail = "", date = "") {
+        const formData = {
+            status: status,
+            mail: mail,
+            date: date,
+        };
 
         $.ajax({
             type: "POST",
@@ -24,7 +28,7 @@ $(document).ready(function () {
             dataType: "json",
             data: formData,
             success: function (response) {
-                // console.log(response);
+                console.log(response);
                 if (response.SUCCESS) {
                     if ($.isEmptyObject(response.DATA)) {
                         handlebarsAppointments(response.DATA);
@@ -44,6 +48,15 @@ $(document).ready(function () {
                                         console.log(key);
                                         downloadReport(key);
                                     });
+
+                                $(document)
+                                    .off("click", `#displayAppointmentInfoReportBtn_${key}`)
+                                    .on("click", `#displayAppointmentInfoReportBtn_${key}`, function (event) {
+                                        console.log(key);
+                                        // event.preventDefault();
+                                        $(`#displayAppointmentReportInfo_${key}`).toggleClass("d-none");
+                                        $(`#displayAppointmentDateReportInfo_${key}`).toggleClass("d-none");
+                                    });
                             }
                         }
                     }
@@ -57,34 +70,42 @@ $(document).ready(function () {
         });
     }
 
-    //Handling tabs in the admin profile page.
-    $("#requests-tab").click(function (e) {
-        e.preventDefault();
-        $(".nav-link").removeClass("active");
-        $(this).addClass("active");
-        appointmentDetails("pending");
+    $("#searchButtonReport").on("click", function (event) {
+        event.preventDefault();
+        const mail = $("#userSerchInputReports").val()?.trim();
+        const status = $("#appointmentStatusReport").val()?.trim();
+        const date = $("#appointmentDateReport").val()?.trim();
+        appointmentDetails(status, mail, date);
     });
 
-    $("#confirmedApp-tab").click(function (e) {
-        e.preventDefault();
-        $(".nav-link").removeClass("active");
-        $(this).addClass("active");
-        appointmentDetails("confirmed");
-    });
+    // //Handling tabs in the admin profile page.
+    // $("#requests-tab").click(function (e) {
+    //     e.preventDefault();
+    //     $(".nav-link").removeClass("active");
+    //     $(this).addClass("active");
+    //     appointmentDetails("pending");
+    // });
 
-    $("#completedApp-tab").click(function (e) {
-        e.preventDefault();
-        $(".nav-link").removeClass("active");
-        $(this).addClass("active");
-        appointmentDetails("completed");
-    });
+    // $("#confirmedApp-tab").click(function (e) {
+    //     e.preventDefault();
+    //     $(".nav-link").removeClass("active");
+    //     $(this).addClass("active");
+    //     appointmentDetails("confirmed");
+    // });
 
-    $("#concelledApp-tab").click(function (e) {
-        e.preventDefault();
-        $(".nav-link").removeClass("active");
-        $(this).addClass("active");
-        appointmentDetails("cancelled");
-    });
+    // $("#completedApp-tab").click(function (e) {
+    //     e.preventDefault();
+    //     $(".nav-link").removeClass("active");
+    //     $(this).addClass("active");
+    //     appointmentDetails("completed");
+    // });
+
+    // $("#concelledApp-tab").click(function (e) {
+    //     e.preventDefault();
+    //     $(".nav-link").removeClass("active");
+    //     $(this).addClass("active");
+    //     appointmentDetails("cancelled");
+    // });
 
     //Sorting the appointment list to display in the admin profile page.
     function getSortedAppointments(data) {
@@ -138,6 +159,51 @@ $(document).ready(function () {
             },
         });
     }
+
+    $("#downloadFilteredReports").on("click", function (event) {
+        event.preventDefault();
+
+        const mail = $("#userSerchInputReports").val()?.trim();
+        const status = $("#appointmentStatusReport").val()?.trim();
+        const date = $("#appointmentDateReport").val()?.trim();
+
+        const formData = {
+            status: status,
+            mail: mail,
+            date: date,
+        };
+
+        console.log(formData);
+
+        $.ajax({
+            type: "POST",
+            url: "./controllers/fileServices.cfc?method=generatePartialXLS",
+            dataType: "json",
+            data: formData,
+            success: function (response) {
+                // console.log(response);
+                if (response.SESSIONAVAILABLE == false) {
+                    alert("New login detected! You’ve been logged out for security.");
+                    window.location.href = "./index.cfm?action=restart";
+                }
+                if (response.SUCCESS) {
+                    downloadFile(
+                        `${window.location.protocol}//${window.location.host}${window.location.pathname.substring(
+                            0,
+                            window.location.pathname.lastIndexOf("/")
+                        )}${response.PATH}`,
+                        "all-appontment-info.xlsx"
+                    );
+                    console.log(response.MESSAGE);
+                } else {
+                    alert(response.MESSAGE);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.warn("AJAX error: " + error);
+            },
+        });
+    });
 
     //Handling export data button submition.
     $("#downloadAllReports").on("click", function (event) {

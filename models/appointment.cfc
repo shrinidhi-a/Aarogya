@@ -1,31 +1,53 @@
 component {
 
     // NOTE: Updated with new Database.
-    public struct function getAppointmentDetailsForAdmin(string status) {
+    public struct function getAppointmentDetailsForAdmin(string status="", string mail="", string date="") {
         local.data = structNew();
+        local.params = {};
     
         try {
-            local.appointmentInfo = queryExecute(
-                "SELECT a.AppointmentID, a.DateAndTime, a.CreatedAt, a.AppointmentStatus, a.StartTime, " & 
-                "d.DoctorID AS DoctorID, d.FullName AS DoctorFullName, d.Qualification, d.Email AS DoctorEmail, d.Phone AS DoctorPhone, " & 
-                "c.CategoryName, " & 
-                "u.UserID AS UserID, u.FullName AS UserFullName, u.Email AS UserEmail, u.Phone AS UserPhone " & 
-                "FROM Appointments a " & 
-                "JOIN Doctors d ON a.DoctorID = d.DoctorID " & 
-                "JOIN Categories c ON a.CategoryID = c.CategoryID " & 
-                "JOIN UserDetails u ON a.PatientID = u.UserID " & 
-                "WHERE LOWER(a.AppointmentStatus) = LOWER(:status) ",
-                {
-                    status: arguments.status
-                }
-            );
+            // Base SQL query
+            local.sql = "SELECT a.AppointmentID, a.DateAndTime, a.CreatedAt, a.AppointmentStatus, a.StartTime, 
+                            d.DoctorID, d.FullName AS DoctorFullName, d.Qualification, d.Email AS DoctorEmail, d.Phone AS DoctorPhone, 
+                            c.CategoryName,  
+                            u.UserID, u.FullName AS UserFullName, u.Email AS UserEmail, u.Phone AS UserPhone 
+                         FROM Appointments a 
+                         JOIN Doctors d ON a.DoctorID = d.DoctorID 
+                         JOIN Categories c ON a.CategoryID = c.CategoryID 
+                         JOIN UserDetails u ON a.PatientID = u.UserID";
+    
+            // Adding conditions dynamically
+            local.conditions = [];
             
+            if (len(trim(arguments.status))) {
+                arrayAppend(local.conditions, "LOWER(a.AppointmentStatus) = LOWER(:status)");
+                local.params["status"] = trim(arguments.status);
+            }
+    
+            if (len(trim(arguments.mail))) {
+                arrayAppend(local.conditions, "u.Email LIKE :mail");
+                local.params["mail"] = "%" & trim(arguments.mail) & "%";
+            }
+    
+            if (len(trim(arguments.date))) {
+                arrayAppend(local.conditions, "CAST(a.DateAndTime AS DATE) = :selectedDate");
+                local.params["selectedDate"] = trim(arguments.date);
+            }
+    
+            // If there are conditions, add WHERE clause
+            if (arrayLen(local.conditions) > 0) {
+                local.sql &= " WHERE " & arrayToList(local.conditions, " AND ");
+            }
+    
+            // Execute the query
+            local.appointmentInfo = queryExecute(local.sql, local.params);
+    
+            // If results exist, process them
             if (local.appointmentInfo.recordCount > 0) {
                 for (local.row in local.appointmentInfo) {
-
                     local.formattedDate = dateFormat(local.row.DateAndTime, "yyyy-MM-dd");
                     local.timeOnly = timeFormat(local.row.StartTime, "hh:mm tt");
-
+    
                     local.data[local.row.AppointmentID] = {
                         Date: local.formattedDate,
                         Time: local.timeOnly,
@@ -48,12 +70,16 @@ component {
                     };
                 }
             }
+    
+            // Return the final result
             return local.data;
         } catch (any e) {
+            // Log error details
             writeLog(file="Aarogyalogs", text="Error fetching all appointments: " & e.message & "; Details: " & e.detail);
             return local.data;
         }
     }
+    
 
     // NOTE: Updated with new Database.
     public boolean function completeAppointment(

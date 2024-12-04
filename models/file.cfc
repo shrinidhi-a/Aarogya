@@ -147,6 +147,106 @@ component {
         }
     }
 
+
+     // NOTE: Updated with new Database.
+     public struct function generatePartialXLS(string status="", string mail="", string date="") {
+        local.response = {
+            success = false,
+            path = "",
+            message = ""
+        }
+
+        variables.excelFilePath = expandPath("../temp/partialAppontmentsdataExcel.xlsx");
+        if(FileExists(variables.excelFilePath)){
+            FileDelete(variables.excelFilePath)
+        }
+
+        // local.data = structNew();
+        local.params = {};
+
+        try {
+            local.sql = "SELECT a.AppointmentID, a.DateAndTime, a.CreatedAt, a.AppointmentStatus, a.StartTime, 
+                            d.DoctorID, d.FullName AS DoctorFullName, d.Qualification, d.Email AS DoctorEmail, d.Phone AS DoctorPhone, 
+                            c.CategoryName,  
+                            u.UserID, u.FullName AS UserFullName, u.Email AS UserEmail, u.Phone AS UserPhone 
+                         FROM Appointments a 
+                         JOIN Doctors d ON a.DoctorID = d.DoctorID 
+                         JOIN Categories c ON a.CategoryID = c.CategoryID 
+                         JOIN UserDetails u ON a.PatientID = u.UserID";
+    
+            // Adding conditions dynamically
+            local.conditions = [];
+            
+            if (len(trim(arguments.status))) {
+                arrayAppend(local.conditions, "LOWER(a.AppointmentStatus) = LOWER(:status)");
+                local.params["status"] = trim(arguments.status);
+            }
+    
+            if (len(trim(arguments.mail))) {
+                arrayAppend(local.conditions, "u.Email LIKE :mail");
+                local.params["mail"] = "%" & trim(arguments.mail) & "%";
+            }
+    
+            if (len(trim(arguments.date))) {
+                arrayAppend(local.conditions, "CAST(a.DateAndTime AS DATE) = :selectedDate");
+                local.params["selectedDate"] = trim(arguments.date);
+            }
+    
+            // If there are conditions, add WHERE clause
+            if (arrayLen(local.conditions) > 0) {
+                local.sql &= " WHERE " & arrayToList(local.conditions, " AND ");
+            }
+    
+            // Execute the query
+            local.appointmentInfo = queryExecute(local.sql, local.params);
+    
+            
+            if (local.appointmentInfo.recordCount > 0) {
+                local.mySpreadsheet = SpreadsheetNew("Appointment Data", true);
+    
+                local.headers = [
+                    "Appointment ID", "Date and Time", "Created At", 
+                    "Appointment Status", "Doctor Full Name", 
+                    "Doctor Specialization", "Doctor Email", 
+                    "Doctor Phone", "Category Name"
+                ];
+    
+                for (local.i = 1; local.i <= arrayLen(local.headers); local.i++) {
+                    SpreadsheetSetCellValue(local.mySpreadsheet, headers[local.i], 1, local.i);
+                }
+    
+                local.rowIndex = 2;
+    
+                for (local.row in local.appointmentInfo) {
+                    SpreadsheetSetCellValue(local.mySpreadsheet, local.row.AppointmentID, local.rowIndex, 1);
+                    SpreadsheetSetCellValue(local.mySpreadsheet, local.row.DateAndTime, local.rowIndex, 2);
+                    SpreadsheetSetCellValue(local.mySpreadsheet, local.row.CreatedAt, local.rowIndex, 3);
+                    SpreadsheetSetCellValue(local.mySpreadsheet, local.row.AppointmentStatus, local.rowIndex, 4);
+                    SpreadsheetSetCellValue(local.mySpreadsheet, local.row.DoctorFullName, local.rowIndex, 5);
+                    SpreadsheetSetCellValue(local.mySpreadsheet, local.row.Qualification, local.rowIndex, 6);
+                    SpreadsheetSetCellValue(local.mySpreadsheet, local.row.DoctorEmail, local.rowIndex, 7);
+                    SpreadsheetSetCellValue(local.mySpreadsheet, local.row.DoctorPhone, local.rowIndex, 8);
+                    SpreadsheetSetCellValue(local.mySpreadsheet, local.row.CategoryName, local.rowIndex, 9);
+                    local.rowIndex++;
+                }
+    
+                SpreadsheetWrite(local.mySpreadsheet, variables.excelFilePath, true);
+
+                local.response.success = true;
+                local.response.path = "/temp/partialAppontmentsdataExcel.xlsx";
+                local.response.message = "Excel file has been downloaded successfully";
+                return local.response;
+            } else {
+                local.response.message = "You have no data to Export";
+                return local.response;
+            }
+    
+        } catch (any e) {
+            writeLog(file="Aarogyalogs", text="Error creating xls: " & e.message & "; Details: " & e.detail);
+            return local.response; 
+        }
+    }
+
     // NOTE: Updated with new Database.
     //TODO: remove
     public struct function getPrescription(

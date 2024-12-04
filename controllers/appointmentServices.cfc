@@ -1,7 +1,7 @@
 component output="true"{
 
     // NOTE: Updated with Aarogya2.0
-    remote struct function getAppointmentDetailsForAdmin(string status)
+    remote struct function getAppointmentDetailsForAdmin(string status, string mail, string date)
         returnformat="JSON" 
     {
 
@@ -21,7 +21,7 @@ component output="true"{
             }
 
             // Fetch all appointment information based on status
-            local.response.data = local.appointments.getAppointmentDetailsForAdmin(arguments.status);
+            local.response.data = local.appointments.getAppointmentDetailsForAdmin(arguments.status, arguments.mail, arguments.date);
             local.response.message = "Successfully retrieved all the appointment details"; 
             local.response.success = true;
 

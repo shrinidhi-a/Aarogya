@@ -37,7 +37,11 @@ $(document).ready(function () {
 
     //Getting appointment details.
     function appointmentDetails(status) {
-        const formData = { status };
+        const formData = {
+            status: status,
+            mail: "",
+            date: "",
+        };
 
         $.ajax({
             type: "POST",
